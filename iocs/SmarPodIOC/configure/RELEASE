@@ -1,0 +1,25 @@
+# RELEASE Location of external products
+# Run "gnumake clean uninstall install" in the application
+# top directory each time this file is changed.
+
+#TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
+
+SUPPORT=/epics/src/support
+SNCSEQ=$(SUPPORT)/seq
+CALC=$(SUPPORT)/calc
+BUSY=$(SUPPORT)/busy
+ASYN=$(SUPPORT)/asyn
+DEVIOCSTATS=$(SUPPORT)/iocStats
+AUTOSAVE=$(SUPPORT)/autosave
+STREAM=$(SUPPORT)/stream
+
+SMARPOD=$(TOP)/../..
+
+# EPICS_BASE usually appears last so other apps can override stuff:
+EPICS_BASE=/epics/src/base
+
+# These lines allow developers to override these RELEASE settings
+# without having to modify this file directly.
+-include $(TOP)/../RELEASE.local
+-include $(TOP)/../RELEASE.$(EPICS_HOST_ARCH).local
+-include $(TOP)/configure/RELEASE.local

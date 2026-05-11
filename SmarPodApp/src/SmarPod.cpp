@@ -1,0 +1,239 @@
+/**
+ * Main source file for the SmarPod EPICS driver
+ *
+ * Author: Afroza Haque
+ *
+ * Copyright (c) : Brookhaven National Laboratory, 2026
+ *
+ */
+
+// Standard includes
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <cmath>
+
+// EPICS includes
+#include <epicsExit.h>
+#include <epicsExport.h>
+#include <epicsStdio.h>
+#include <epicsString.h>
+#include <epicsThread.h>
+#include <epicsTime.h>
+#include <iocsh.h>
+
+#include "SmarPod.hpp"
+
+
+// Error message formatters
+#define ERR(msg)                                                                                 \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", driverName, functionName, \
+              msg)
+
+#define ERR_ARGS(fmt, ...)                                                              \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", driverName, \
+              functionName, __VA_ARGS__);
+
+// Warning message formatters
+#define WARN(msg) \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", driverName, functionName, msg)
+
+#define WARN_ARGS(fmt, ...)                                                            \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", driverName, \
+              functionName, __VA_ARGS__);
+
+// Log message formatters
+#define LOG(msg) \
+    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: %s\n", driverName, functionName, msg)
+
+#define LOG_ARGS(fmt, ...)                                                                       \
+    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: " fmt "\n", driverName, functionName, \
+              __VA_ARGS__);
+
+
+using namespace std;
+
+const char* driverName = "SmarPod";
+
+/**
+ * @brief External configuration function for SmarPod.
+ *
+ * Envokes the constructor to create a new SmarPod object
+ * This is the function that initializes the driver, and is called in the IOC startup script
+ *
+ * NOTE: When implementing a new driver with PortDriverTemplate, your device may require additional
+ * inputs from the user for connection (ex: IP address, serial number, etc.). These should be added
+ * as additional IOC shell arguments for this function.
+ *
+ * @param portName Asyn port name for the SmarPod object instance.
+
+ * @return asynSuccess
+ */
+extern "C" int SmarPodConfig(const char* portName) {
+    new SmarPod(portName, tcpPortName);
+
+    return (asynSuccess);
+}
+
+
+/**
+ * @brief Callback function called when IOC is terminated.
+ *
+ * @param pPvt Pointer to SmarPod object
+ */
+static void exitCallbackC(void* pPvt) {
+    SmarPod* pSmarPod = (SmarPod*)pPvt;
+    delete pSmarPod;
+}
+
+
+
+
+/**
+ * @brief Handles write events to integer parameters
+ * 
+ * @param pasynUser Pointer to asynUser for SmarPod instance
+ * @param value Value written to the integer parameter
+ * @return asynSuccess if write was successful, asynError otherwise
+ */
+asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
+    int function = pasynUser->reason;
+    int status = asynSuccess;
+    static const char* functionName = "writeInt32";
+
+    if (function < FIRST_SMARPOD_PARAM) {
+        status = asynPortDriver::writeInt32(pasynUser, value);
+    }
+
+    if (status) {
+        ERR_ARGS("ERROR status=%d, function=%d, value=%d", status, function, value);
+        return asynError;
+    } else {  // Don't log period checkStatus PV processing
+        status = setIntegerParam(function, value);
+        LOG_ARGS("function=%d value=%d", function, value);
+    }
+    callParamCallbacks();
+    return asynSuccess;
+}
+
+/**
+ * @brief Handles write events to float parameters
+ * 
+ * @param pasynUser Pointer to asynUser for SmarPod instance
+ * @param value Value written to the double parameter
+ * @return asynSuccess if write was successful, asynError otherwise
+ */
+asynStatus SmarPod::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
+    int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
+    static const char* functionName = "writeFloat64";
+    if (function < FIRST_SMARPOD_PARAM) {
+        status = asynPortDriver::writeFloat64(pasynUser, value);
+    }
+
+    if (status) {
+        ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
+    } else {
+        status = setDoubleParam(function, value);
+        LOG_ARGS("function=%d value=%f", function, value);
+    }
+
+    callParamCallbacks();
+    return status;
+}
+
+/**
+ * @brief Function used for reporting SmarPod info to a log.
+ *
+ * @param fp Open file pointer to log file
+ * @param details Level of details to write to the file
+ */
+void SmarPod::report(FILE* fp, int details) {
+    const char* functionName = "report";
+    LOG("Reporting to external log file");
+    if (details > 0) {
+        fprintf(fp, " Connected Device Information\n");
+        asynPortDriver::report(fp, details);
+    }
+}
+
+/**
+ * @brief Constructor for SmarPod
+ * 
+ * Responsible for initial connection to the device - instance initialized in
+ * SmarPodConfig, called at IOC startup.
+ * 
+ * @param portName Asyn port name for the SmarPod object instance.
+
+ */
+SmarPod::SmarPod(const char* portName)
+
+    : asynPortDriver(
+          portName, 1, /* maxAddr */
+          (int)NUM_SMARPOD_PARAMS,
+          asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |
+              asynOctetMask, /* Interface mask */
+          asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask |
+              asynOctetMask, /* Interrupt mask */
+          0, /* asynFlags.  This driver does not block and it is not multi-device, so flag is 0 */
+          1, /* Autoconnect */
+          0, /* Default priority */
+          0) /* Default stack size*/
+{
+    static const char* functionName = "SmarPod";
+
+    // Create any driver specific parameters
+    createParam(SmarPod_VersionString, asynParamOctet, &SmarPod_Version);
+
+
+    // When epics is exited, delete the instance of this class
+    epicsAtExit(exitCallbackC, (void*)this);
+}
+
+/**
+ * @brief Destructor for SmarPod
+ * 
+ * Called at IOC exit.
+ */
+SmarPod::~SmarPod() {
+    const char* functionName = "~SmarPod";
+    LOG("Disconnecting SmarPod device...");
+    LOG("Shutdown complete.");
+}
+
+//-------------------------------------------------------------
+// SmarPod ioc shell registration
+//-------------------------------------------------------------
+
+/* SmarPodConfig -> These are the args passed to the constructor in the epics config function */
+static const iocshArg SmarPodConfigArg0 = {"portName", iocshArgString};
+
+
+
+/* Array of config args */
+
+static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0,
+                                                    &SmarPodConfigArg1};
+
+
+/**
+ * @brief Call function pointer for IOC shell.
+ *
+ * @param args Array of IOC shell arguments parsed during IOC startup
+ */
+static void configSmarPodCallFunc(const iocshArgBuf* args) {
+    
+    SmarPodConfig(args[0].sval, args[1].sval);
+    
+}
+
+/* information about the configuration function */
+static const iocshFuncDef configSmarPod = {"SmarPodConfig", 1, SmarPodConfigArgs};
+
+/* IOC register function */
+static void SmarPodRegister(void) { iocshRegister(&configSmarPod, configSmarPodCallFunc); }
+
+/* external function for IOC register */
+extern "C" {
+epicsExportRegistrar(SmarPodRegister);
+}

@@ -1,0 +1,6 @@
+record(stringin, "$(PREFIX)Version_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Version number of the port driver")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_VERSION")
+}
