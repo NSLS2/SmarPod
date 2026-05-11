@@ -32,9 +32,8 @@ class SmarPod : public asynPortDriver {
 #include "SmarPodParamDefs.h"
 
    private:
-
-      unsigned int id;
-      void createAllParams();
+    unsigned int id;
+    void createAllParams();
 };
 
 #endif

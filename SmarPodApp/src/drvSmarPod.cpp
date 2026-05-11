@@ -164,15 +164,13 @@ static void exitCallbackC(void* pPvt) {
 //     return status;
 // }
 
-int LogError(Smarpod_Status status)
-{
-    if(status != SMARPOD_OK)
-    {
-        const char *info;
-        if(Smarpod_GetStatusInfo(status,&info))
+int LogError(Smarpod_Status status) {
+    if (status != SMARPOD_OK) {
+        const char* info;
+        if (Smarpod_GetStatusInfo(status, &info))
             printf("unknown SmarPod status\n");
         else
-            printf("error: %s\n",info);
+            printf("error: %s\n", info);
     }
     return status;
 }
@@ -206,7 +204,8 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress, int modelNum)
     unsigned int major, minor, update;
     Smarpod_GetDLLVersion(&major, &minor, &update);
     char drvVer[40], sdkVer[40], locater[40];
-    snprintf(drvVer, 40, "%d.%d.%d", SMARPOD_VERSION_MAJOR, SMARPOD_API_VERSION_MINOR, SMARPOD_API_VERSION_UPDATE);
+    snprintf(drvVer, 40, "%d.%d.%d", SMARPOD_VERSION_MAJOR, SMARPOD_API_VERSION_MINOR,
+             SMARPOD_API_VERSION_UPDATE);
     snprintf(sdkVer, 40, "%u.%u.%u", major, minor, update);
     snprintf(locater, 40, "network:%s", ipAddress);
     printf("using SmarPod library version %s\n", sdkVer);
@@ -216,9 +215,11 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress, int modelNum)
     callParamCallbacks();
 
     printf("Calling Smarpod_Open with args %s, %d\n", locater, modelNum);
-    int status = Smarpod_Open(&id, modelNum, locater,"");
-    if (status) LogError(status);
-    else printf("Successfully opened SmarPod\n");
+    int status = Smarpod_Open(&id, modelNum, locater, "");
+    if (status)
+        LogError(status);
+    else
+        printf("Successfully opened SmarPod\n");
 
     // When epics is exited, delete the instance of this class
     epicsAtExit(exitCallbackC, (void*) this);
@@ -248,8 +249,7 @@ static const iocshArg SmarPodConfigArg2 = {"model", iocshArgInt};
 
 /* Array of config args */
 
-static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0,
-                                                    &SmarPodConfigArg1,
+static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0, &SmarPodConfigArg1,
                                                     &SmarPodConfigArg2};
 
 /**
