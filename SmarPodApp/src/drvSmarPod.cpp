@@ -26,27 +26,26 @@
 #include "drvSmarPod.h"
 
 // Error message formatters
-#define ERR(msg)                                                                                 \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", driverName, __func__, \
-              msg)
+#define ERR(msg) \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", driverName, __func__, msg)
 
-#define ERR_ARGS(fmt, ...)                                                              \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", driverName, \
-              __func__, __VA_ARGS__);
+#define ERR_ARGS(fmt, ...)                                                                        \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", driverName, __func__, \
+              __VA_ARGS__);
 
 // Warning message formatters
 #define WARN(msg) \
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", driverName, __func__, msg)
 
-#define WARN_ARGS(fmt, ...)                                                            \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", driverName, \
-              __func__, __VA_ARGS__);
+#define WARN_ARGS(fmt, ...)                                                                      \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", driverName, __func__, \
+              __VA_ARGS__);
 
 // Log message formatters
 #define LOG(msg) \
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: %s\n", driverName, __func__, msg)
 
-#define LOG_ARGS(fmt, ...)                                                                   \
+#define LOG_ARGS(fmt, ...)                                                               \
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: " fmt "\n", driverName, __func__, \
               __VA_ARGS__);
 
@@ -68,8 +67,8 @@ const char* driverName = "SmarPod";
 
  * @return asynSuccess
  */
-extern "C" int SmarPodConfig(const char* portName, const char* ipAddress) {
-    new SmarPod(portName, ipAddress);
+extern "C" int SmarPodConfig(const char* portName, const char* ipAddress, int modelNum) {
+    new SmarPod(portName, ipAddress, modelNum);
 
     return (asynSuccess);
 }
@@ -165,6 +164,19 @@ static void exitCallbackC(void* pPvt) {
 //     return status;
 // }
 
+int LogError(Smarpod_Status status)
+{
+    if(status != SMARPOD_OK)
+    {
+        const char *info;
+        if(Smarpod_GetStatusInfo(status,&info))
+            printf("unknown SmarPod status\n");
+        else
+            printf("error: %s\n",info);
+    }
+    return status;
+}
+
 /**
  * @brief Constructor for SmarPod
  *
@@ -174,7 +186,7 @@ static void exitCallbackC(void* pPvt) {
  * @param portName Asyn port name for the SmarPod object instance.
 
  */
-SmarPod::SmarPod(const char* portName, const char* ipAddress)
+SmarPod::SmarPod(const char* portName, const char* ipAddress, int modelNum)
 
     : asynPortDriver(
           portName, 1, /* maxAddr */
@@ -188,13 +200,25 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress)
           0, /* Default priority */
           0) /* Default stack size*/
 {
-
     // Create any driver specific parameters
-    createParam(SmarPod_VersionString, asynParamOctet, &SmarPod_Version);
+    this->createAllParams();
 
     unsigned int major, minor, update;
     Smarpod_GetDLLVersion(&major, &minor, &update);
-    printf("using SmarPod library version %u.%u.%u\n", major, minor, update);
+    char drvVer[40], sdkVer[40], locater[40];
+    snprintf(drvVer, 40, "%d.%d.%d", SMARPOD_VERSION_MAJOR, SMARPOD_API_VERSION_MINOR, SMARPOD_API_VERSION_UPDATE);
+    snprintf(sdkVer, 40, "%u.%u.%u", major, minor, update);
+    snprintf(locater, 40, "network:%s", ipAddress);
+    printf("using SmarPod library version %s\n", sdkVer);
+
+    setStringParam(SmarPod_Version, drvVer);
+    setStringParam(SmarPod_SdkVer, sdkVer);
+    callParamCallbacks();
+
+    printf("Calling Smarpod_Open with args %s, %d\n", locater, modelNum);
+    int status = Smarpod_Open(&id, modelNum, locater,"");
+    if (status) LogError(status);
+    else printf("Successfully opened SmarPod\n");
 
     // When epics is exited, delete the instance of this class
     epicsAtExit(exitCallbackC, (void*) this);
@@ -207,8 +231,10 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress)
  */
 SmarPod::~SmarPod() {
     const char* functionName = "~SmarPod";
-    LOG("Disconnecting SmarPod device...");
-    LOG("Shutdown complete.");
+    printf("Disconnecting SmarPod device...\n");
+    int status = Smarpod_Close(id);
+    if (status) LogError(status);
+    printf("Shutdown complete.\n");
 }
 
 //-------------------------------------------------------------
@@ -218,10 +244,13 @@ SmarPod::~SmarPod() {
 /* SmarPodConfig -> These are the args passed to the constructor in the epics config function */
 static const iocshArg SmarPodConfigArg0 = {"portName", iocshArgString};
 static const iocshArg SmarPodConfigArg1 = {"ipAddress", iocshArgString};
+static const iocshArg SmarPodConfigArg2 = {"model", iocshArgInt};
 
 /* Array of config args */
 
-static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0, &SmarPodConfigArg1};
+static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0,
+                                                    &SmarPodConfigArg1,
+                                                    &SmarPodConfigArg2};
 
 /**
  * @brief Call function pointer for IOC shell.
@@ -229,11 +258,11 @@ static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0, &SmarPod
  * @param args Array of IOC shell arguments parsed during IOC startup
  */
 static void configSmarPodCallFunc(const iocshArgBuf* args) {
-    SmarPodConfig(args[0].sval, args[1].sval);
+    SmarPodConfig(args[0].sval, args[1].sval, args[2].ival);
 }
 
 /* information about the configuration function */
-static const iocshFuncDef configSmarPod = {"SmarPodConfig", 2, SmarPodConfigArgs};
+static const iocshFuncDef configSmarPod = {"SmarPodConfig", 3, SmarPodConfigArgs};
 
 /* IOC register function */
 static void SmarPodRegister(void) { iocshRegister(&configSmarPod, configSmarPodCallFunc); }

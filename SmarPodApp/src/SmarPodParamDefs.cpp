@@ -5,4 +5,5 @@
 
 void SmarPod::createAllParams() {
     createParam(SmarPod_VersionString, asynParamOctet, &SmarPod_Version);
+    createParam(SmarPod_SdkVerString, asynParamOctet, &SmarPod_SdkVer);
 }

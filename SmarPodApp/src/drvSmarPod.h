@@ -14,7 +14,7 @@
 
 class SmarPod : public asynPortDriver {
    public:
-    SmarPod(const char* portName, const char* ipAddress);
+    SmarPod(const char* portName, const char* ipAddress, int modelNum);
     ~SmarPod();
 
     /* These are the methods that we override from asynPortDriver as needed*/
@@ -32,6 +32,9 @@ class SmarPod : public asynPortDriver {
 #include "SmarPodParamDefs.h"
 
    private:
+
+      unsigned int id;
+      void createAllParams();
 };
 
 #endif

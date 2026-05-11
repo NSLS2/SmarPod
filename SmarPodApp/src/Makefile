@@ -12,7 +12,7 @@ LIBRARY_IOC += drvSmarPod
 
 INC += drvSmarPod.h SmarPodParamDefs.h
 
-LIB_SRCS += drvSmarPod.cpp
+LIB_SRCS += drvSmarPod.cpp SmarPodParamDefs.cpp
 
 DBD += drvSmarPodSupport.dbd
 

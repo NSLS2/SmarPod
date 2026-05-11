@@ -4,3 +4,10 @@ record(stringin, "$(PREFIX)Version_RBV") {
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_VERSION")
 }
+
+record(stringin, "$(PREFIX)SDKVersion_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "SmarPod SDK Version")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SDK_VER")
+}
