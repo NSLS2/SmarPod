@@ -204,15 +204,14 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress, int modelNum)
     unsigned int major, minor, update;
     Smarpod_GetDLLVersion(&major, &minor, &update);
     char drvVer[40], sdkVer[40], locater[40];
-    snprintf(drvVer, 40, "%d.%d.%d", SMARPOD_VERSION_MAJOR, SMARPOD_API_VERSION_MINOR,
-             SMARPOD_API_VERSION_UPDATE);
+    snprintf(drvVer, 40, "%d.%d.%d", DRV_SMARPOD_VERSION_MAJOR, DRV_SMARPOD_VERSION_MINOR,
+             DRV_SMARPOD_VERSION_PATCH);
     snprintf(sdkVer, 40, "%u.%u.%u", major, minor, update);
     snprintf(locater, 40, "network:%s", ipAddress);
     printf("using SmarPod library version %s\n", sdkVer);
 
     setStringParam(SmarPod_Version, drvVer);
     setStringParam(SmarPod_SdkVer, sdkVer);
-    callParamCallbacks();
 
     printf("Calling Smarpod_Open with args %s, %d\n", locater, modelNum);
     int status = Smarpod_Open(&id, modelNum, locater, "");
@@ -220,6 +219,17 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress, int modelNum)
         LogError(status);
     else
         printf("Successfully opened SmarPod\n");
+
+    status = Smarpod_SetSensorMode(id, SMARPOD_SENSORS_ENABLED);
+    if (status)
+        LogError(status);
+    else
+        printf("Enabled all sensors");
+
+    int referenced;
+    Smarpod_IsReferenced(id, &referenced);
+    setIntegerParam(SmarPod_IsReferenced, referenced);
+    callParamCallbacks();
 
     // When epics is exited, delete the instance of this class
     epicsAtExit(exitCallbackC, (void*) this);

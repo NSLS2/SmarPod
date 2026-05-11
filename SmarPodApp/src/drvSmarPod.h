@@ -5,9 +5,9 @@
 #include <epicsExport.h>
 #include <iocsh.h>
 
-#define SMARPOD_VERSION_MAJOR 0
-#define SMARPOD_VERSION_MINOR 0
-#define SMARPOD_VERSION_PATCH 1
+#define DRV_SMARPOD_VERSION_MAJOR 0
+#define DRV_SMARPOD_VERSION_MINOR 0
+#define DRV_SMARPOD_VERSION_PATCH 1
 
 // Defines of strings that map Params to Records
 #define SmarPod_VersionString "SMARPOD_VERSION"

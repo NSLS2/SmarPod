@@ -2,12 +2,21 @@ record(stringin, "$(PREFIX)Version_RBV") {
     field(DTYP, "asynOctetRead")
     field(DESC, "Version number of the port driver")
     field(SCAN, "I/O Intr")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_VERSION")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SP_VERSION")
 }
 
 record(stringin, "$(PREFIX)SDKVersion_RBV") {
     field(DTYP, "asynOctetRead")
     field(DESC, "SmarPod SDK Version")
     field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SDK_VER")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SP_SDK_VER")
+}
+
+record(bi, "$(PREFIX)IsReferenced_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Is referenced")
+    field(SCAN, "I/O Intr")
+    field(ZNAM, "Not Referenced")
+    field(ONAM, "Referenced")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT))SP_IS_REFERENCED")
 }
