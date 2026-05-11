@@ -4,14 +4,19 @@ include $(TOP)/configure/CONFIG
 #  ADD MACRO DEFINITIONS AFTER THIS LINE
 #
 
-LIBRARY_IOC += SmarPod
+USR_CPPFLAGS += -std=c++11
+USR_INCLUDES += -I$(SMARPOD_INCLUDE)
+USR_LDFLAGS += -L$(SMARPOD_LIB)
 
-INC += SmarPod.hpp
+LIBRARY_IOC += drvSmarPod
 
-LIB_SRCS += SmarPod.cpp
+INC += drvSmarPod.hpp
 
-DBD += SmarPodSupport.dbd
+LIB_SRCS += drvSmarPod.cpp
 
+DBD += drvSmarPodSupport.dbd
+
+LIB_SYS_LIBS += smarpod
 
 # #=============================
 

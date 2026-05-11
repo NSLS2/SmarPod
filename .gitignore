@@ -3,3 +3,9 @@ venv/
 envPaths
 *.swp
 .vscode/
+lib/
+bin/
+dbd/
+include/
+example1.c
+db/

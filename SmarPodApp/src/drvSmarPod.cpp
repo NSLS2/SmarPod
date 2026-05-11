@@ -22,7 +22,7 @@
 #include <epicsTime.h>
 #include <iocsh.h>
 
-#include "SmarPod.hpp"
+#include "drvSmarPod.hpp"
 
 
 // Error message formatters
@@ -69,8 +69,8 @@ const char* driverName = "SmarPod";
 
  * @return asynSuccess
  */
-extern "C" int SmarPodConfig(const char* portName) {
-    new SmarPod(portName, tcpPortName);
+extern "C" int SmarPodConfig(const char* portName, const char* ipAddress) {
+    new SmarPod(portName, ipAddress);
 
     return (asynSuccess);
 }
@@ -89,73 +89,86 @@ static void exitCallbackC(void* pPvt) {
 
 
 
-/**
- * @brief Handles write events to integer parameters
- * 
- * @param pasynUser Pointer to asynUser for SmarPod instance
- * @param value Value written to the integer parameter
- * @return asynSuccess if write was successful, asynError otherwise
- */
-asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
-    int function = pasynUser->reason;
-    int status = asynSuccess;
-    static const char* functionName = "writeInt32";
+// /**
+//  * @brief Handles write events to integer parameters
+//  * 
+//  * @param pasynUser Pointer to asynUser for SmarPod instance
+//  * @param value Value written to the integer parameter
+//  * @return asynSuccess if write was successful, asynError otherwise
+//  */
+// asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
+//     int function = pasynUser->reason;
+//     int status = asynSuccess;
+//     static const char* functionName = "writeInt32";
 
-    if (function < FIRST_SMARPOD_PARAM) {
-        status = asynPortDriver::writeInt32(pasynUser, value);
-    }
+//     if (function < FIRST_SMARPOD_PARAM) {
+//         status = asynPortDriver::writeInt32(pasynUser, value);
+//     }
 
-    if (status) {
-        ERR_ARGS("ERROR status=%d, function=%d, value=%d", status, function, value);
-        return asynError;
-    } else {  // Don't log period checkStatus PV processing
-        status = setIntegerParam(function, value);
-        LOG_ARGS("function=%d value=%d", function, value);
-    }
-    callParamCallbacks();
-    return asynSuccess;
-}
+//     if (status) {
+//         ERR_ARGS("ERROR status=%d, function=%d, value=%d", status, function, value);
+//         return asynError;
+//     } else {  // Don't log period checkStatus PV processing
+//         status = setIntegerParam(function, value);
+//         LOG_ARGS("function=%d value=%d", function, value);
+//     }
+//     callParamCallbacks();
+//     return asynSuccess;
+// }
 
-/**
- * @brief Handles write events to float parameters
- * 
- * @param pasynUser Pointer to asynUser for SmarPod instance
- * @param value Value written to the double parameter
- * @return asynSuccess if write was successful, asynError otherwise
- */
-asynStatus SmarPod::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
-    int function = pasynUser->reason;
-    asynStatus status = asynSuccess;
-    static const char* functionName = "writeFloat64";
-    if (function < FIRST_SMARPOD_PARAM) {
-        status = asynPortDriver::writeFloat64(pasynUser, value);
-    }
+// /**
+//  * @brief Handles write events to float parameters
+//  * 
+//  * @param pasynUser Pointer to asynUser for SmarPod instance
+//  * @param value Value written to the double parameter
+//  * @return asynSuccess if write was successful, asynError otherwise
+//  */
+// asynStatus SmarPod::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
+//     int function = pasynUser->reason;
+//     asynStatus status = asynSuccess;
+//     static const char* functionName = "writeFloat64";
+//     if (function < FIRST_SMARPOD_PARAM) {
+//         status = asynPortDriver::writeFloat64(pasynUser, value);
+//     }
 
-    if (status) {
-        ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
-    } else {
-        status = setDoubleParam(function, value);
-        LOG_ARGS("function=%d value=%f", function, value);
-    }
+//     if (status) {
+//         ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
+//     } else {
+//         status = setDoubleParam(function, value);
+//         LOG_ARGS("function=%d value=%f", function, value);
+//     }
 
-    callParamCallbacks();
-    return status;
-}
+//     callParamCallbacks();
+//     return status;
+// }
 
-/**
- * @brief Function used for reporting SmarPod info to a log.
- *
- * @param fp Open file pointer to log file
- * @param details Level of details to write to the file
- */
-void SmarPod::report(FILE* fp, int details) {
-    const char* functionName = "report";
-    LOG("Reporting to external log file");
-    if (details > 0) {
-        fprintf(fp, " Connected Device Information\n");
-        asynPortDriver::report(fp, details);
-    }
-}
+// /**
+//  * @brief Function used for reporting SmarPod info to a log.
+//  *
+//  * @param fp Open file pointer to log file
+//  * @param details Level of details to write to the file
+//  */
+// void SmarPod::report(FILE* fp, int details) {
+//     const char* functionName = "report";
+//     LOG("Reporting to external log file");
+//     if (details > 0) {
+//         fprintf(fp, " Connected Device Information\n");
+//         asynPortDriver::report(fp, details);
+//     }
+// }
+
+// int SmarPod::LogError(Smarpod_Status status)
+// {
+//     if(status != SMARPOD_OK)
+//     {
+//         const char *info;
+//         if(Smarpod_GetStatusInfo(status,&info))
+//             printf("unknown SmarPod status\n");
+//         else
+//             printf("error: %s\n",info);
+//     }
+//     return status;
+// }
 
 /**
  * @brief Constructor for SmarPod
@@ -166,7 +179,7 @@ void SmarPod::report(FILE* fp, int details) {
  * @param portName Asyn port name for the SmarPod object instance.
 
  */
-SmarPod::SmarPod(const char* portName)
+SmarPod::SmarPod(const char* portName, const char* ipAddress)
 
     : asynPortDriver(
           portName, 1, /* maxAddr */
@@ -185,6 +198,9 @@ SmarPod::SmarPod(const char* portName)
     // Create any driver specific parameters
     createParam(SmarPod_VersionString, asynParamOctet, &SmarPod_Version);
 
+    unsigned int major, minor, update;
+    Smarpod_GetDLLVersion(&major, &minor, &update);
+    printf("using SmarPod library version %u.%u.%u\n",major,minor,update);
 
     // When epics is exited, delete the instance of this class
     epicsAtExit(exitCallbackC, (void*)this);
@@ -207,6 +223,7 @@ SmarPod::~SmarPod() {
 
 /* SmarPodConfig -> These are the args passed to the constructor in the epics config function */
 static const iocshArg SmarPodConfigArg0 = {"portName", iocshArgString};
+static const iocshArg SmarPodConfigArg1 = {"ipAddress", iocshArgString};
 
 
 
@@ -222,13 +239,11 @@ static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0,
  * @param args Array of IOC shell arguments parsed during IOC startup
  */
 static void configSmarPodCallFunc(const iocshArgBuf* args) {
-    
     SmarPodConfig(args[0].sval, args[1].sval);
-    
 }
 
 /* information about the configuration function */
-static const iocshFuncDef configSmarPod = {"SmarPodConfig", 1, SmarPodConfigArgs};
+static const iocshFuncDef configSmarPod = {"SmarPodConfig", 2, SmarPodConfigArgs};
 
 /* IOC register function */
 static void SmarPodRegister(void) { iocshRegister(&configSmarPod, configSmarPodCallFunc); }
