@@ -1,0 +1,42 @@
+---
+repos:
+  # General pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: check-yaml
+      - id: check-json
+      - id: check-xml
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format
+        entry: clang-format -i
+        language: python
+        types_or: [c++, c]
+        args: ["-style=file"]
+        require_serial: false
+
+      - id: ruff
+        name: lint with ruff
+        language: system
+        entry: ruff check --force-exclude
+        types: [python]
+        require_serial: true
+
+      - id: ruff-format
+        name: format with ruff
+        language: system
+        entry: ruff format --force-exclude
+        types: [python]
+        require_serial: true

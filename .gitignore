@@ -9,3 +9,6 @@ dbd/
 include/
 example1.c
 db/
+# pixi environments
+.pixi/*
+!.pixi/config.toml
