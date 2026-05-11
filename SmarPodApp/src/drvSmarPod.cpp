@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <cmath>
 
 // EPICS includes
@@ -23,7 +24,6 @@
 #include <iocsh.h>
 
 #include "drvSmarPod.hpp"
-
 
 // Error message formatters
 #define ERR(msg)                                                                                 \
@@ -46,10 +46,9 @@
 #define LOG(msg) \
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: %s\n", driverName, functionName, msg)
 
-#define LOG_ARGS(fmt, ...)                                                                       \
+#define LOG_ARGS(fmt, ...)                                                                   \
     asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: " fmt "\n", driverName, functionName, \
               __VA_ARGS__);
-
 
 using namespace std;
 
@@ -75,23 +74,19 @@ extern "C" int SmarPodConfig(const char* portName, const char* ipAddress) {
     return (asynSuccess);
 }
 
-
 /**
  * @brief Callback function called when IOC is terminated.
  *
  * @param pPvt Pointer to SmarPod object
  */
 static void exitCallbackC(void* pPvt) {
-    SmarPod* pSmarPod = (SmarPod*)pPvt;
+    SmarPod* pSmarPod = (SmarPod*) pPvt;
     delete pSmarPod;
 }
 
-
-
-
 // /**
 //  * @brief Handles write events to integer parameters
-//  * 
+//  *
 //  * @param pasynUser Pointer to asynUser for SmarPod instance
 //  * @param value Value written to the integer parameter
 //  * @return asynSuccess if write was successful, asynError otherwise
@@ -118,7 +113,7 @@ static void exitCallbackC(void* pPvt) {
 
 // /**
 //  * @brief Handles write events to float parameters
-//  * 
+//  *
 //  * @param pasynUser Pointer to asynUser for SmarPod instance
 //  * @param value Value written to the double parameter
 //  * @return asynSuccess if write was successful, asynError otherwise
@@ -172,10 +167,10 @@ static void exitCallbackC(void* pPvt) {
 
 /**
  * @brief Constructor for SmarPod
- * 
+ *
  * Responsible for initial connection to the device - instance initialized in
  * SmarPodConfig, called at IOC startup.
- * 
+ *
  * @param portName Asyn port name for the SmarPod object instance.
 
  */
@@ -183,7 +178,7 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress)
 
     : asynPortDriver(
           portName, 1, /* maxAddr */
-          (int)NUM_SMARPOD_PARAMS,
+          (int) NUM_SMARPOD_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |
               asynOctetMask, /* Interface mask */
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask |
@@ -200,15 +195,15 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress)
 
     unsigned int major, minor, update;
     Smarpod_GetDLLVersion(&major, &minor, &update);
-    printf("using SmarPod library version %u.%u.%u\n",major,minor,update);
+    printf("using SmarPod library version %u.%u.%u\n", major, minor, update);
 
     // When epics is exited, delete the instance of this class
-    epicsAtExit(exitCallbackC, (void*)this);
+    epicsAtExit(exitCallbackC, (void*) this);
 }
 
 /**
  * @brief Destructor for SmarPod
- * 
+ *
  * Called at IOC exit.
  */
 SmarPod::~SmarPod() {
@@ -225,13 +220,9 @@ SmarPod::~SmarPod() {
 static const iocshArg SmarPodConfigArg0 = {"portName", iocshArgString};
 static const iocshArg SmarPodConfigArg1 = {"ipAddress", iocshArgString};
 
-
-
 /* Array of config args */
 
-static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0,
-                                                    &SmarPodConfigArg1};
-
+static const iocshArg* const SmarPodConfigArgs[] = {&SmarPodConfigArg0, &SmarPodConfigArg1};
 
 /**
  * @brief Call function pointer for IOC shell.
