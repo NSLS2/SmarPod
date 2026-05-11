@@ -6,7 +6,8 @@ include $(TOP)/configure/CONFIG
 PROD_NAME = SmarPodApp
 PROD_IOC += $(PROD_NAME)
 
-USR_LDFLAGS += -L$(SMARPOD_LIB)
+USR_LDFLAGS += -L$(SMARPOD_SDK_LIB)
+USR_LDFLAGS += -Wl,-rpath-link,$(SMARPOD_SDK_LIB)
 
 # <name>.dbd will be created from <name>Include.dbd
 DBD += $(PROD_NAME).dbd
