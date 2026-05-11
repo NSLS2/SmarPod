@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <display version="2.0.0">
+    <name>SmarPod</name>
+    <widget type="label" version="2.0.0">
+      <x>10</x>
+      <y>10</y>
+      <width>150</width>
+      <height>20</height>
+      <text>Version number of the port driver</text>
+      <foreground_color>
+        <color red="0" blue="0" green="0" alpha="255"/>
+      </foreground_color>
+      <background_color>
+        <color red="187" blue="187" green="187" alpha="255"/>
+      </background_color>
+      <font>
+        <font family="Liberation Sans" size="16" style="REGULAR"/>
+      </font>
+      <horizontal_alignment>0</horizontal_alignment>
+      <name>Label_1</name>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <x>170</x>
+      <y>10</y>
+      <width>150</width>
+      <height>20</height>
+      <pv_name>$(PREFIX)Version_RBV</pv_name>
+      <foreground_color>
+        <color red="10" blue="184" green="0" alpha="255"/>
+      </foreground_color>
+      <background_color>
+        <color red="187" blue="187" green="187" alpha="255"/>
+      </background_color>
+      <font>
+        <font family="Liberation Sans" size="16" style="REGULAR"/>
+      </font>
+      <name>TextUpdate_1</name>
+    </widget>
+    <background_color>
+      <color red="187" blue="187" green="187" alpha="255"/>
+    </background_color>
+    <height>50</height>
+    <width>330</width>
+  </display>

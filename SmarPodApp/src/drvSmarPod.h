@@ -29,12 +29,9 @@ class SmarPod : public asynPortDriver {
     //  virtual void report(FILE* fp, int details);
 
    protected:
-#define FIRST_SMARPOD_PARAM SmarPod_Version
-    int SmarPod_Version;
-#define LAST_SMARPOD_PARAM SmarPod_Version
+#include "SmarPodParamDefs.h"
 
    private:
 };
 
-#define NUM_SMARPOD_PARAMS ((int) (&LAST_SMARPOD_PARAM - &FIRST_SMARPOD_PARAM + 1))
 #endif

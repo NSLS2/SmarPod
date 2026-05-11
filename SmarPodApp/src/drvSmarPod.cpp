@@ -23,31 +23,31 @@
 #include <epicsTime.h>
 #include <iocsh.h>
 
-#include "drvSmarPod.hpp"
+#include "drvSmarPod.h"
 
 // Error message formatters
 #define ERR(msg)                                                                                 \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", driverName, functionName, \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", driverName, __func__, \
               msg)
 
 #define ERR_ARGS(fmt, ...)                                                              \
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", driverName, \
-              functionName, __VA_ARGS__);
+              __func__, __VA_ARGS__);
 
 // Warning message formatters
 #define WARN(msg) \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", driverName, functionName, msg)
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", driverName, __func__, msg)
 
 #define WARN_ARGS(fmt, ...)                                                            \
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", driverName, \
-              functionName, __VA_ARGS__);
+              __func__, __VA_ARGS__);
 
 // Log message formatters
 #define LOG(msg) \
-    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: %s\n", driverName, functionName, msg)
+    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: %s\n", driverName, __func__, msg)
 
 #define LOG_ARGS(fmt, ...)                                                                   \
-    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: " fmt "\n", driverName, functionName, \
+    asynPrint(pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s: " fmt "\n", driverName, __func__, \
               __VA_ARGS__);
 
 using namespace std;
@@ -188,7 +188,6 @@ SmarPod::SmarPod(const char* portName, const char* ipAddress)
           0, /* Default priority */
           0) /* Default stack size*/
 {
-    static const char* functionName = "SmarPod";
 
     // Create any driver specific parameters
     createParam(SmarPod_VersionString, asynParamOctet, &SmarPod_Version);

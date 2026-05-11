@@ -10,7 +10,7 @@ USR_LDFLAGS += -L$(SMARPOD_SDK_LIB)
 
 LIBRARY_IOC += drvSmarPod
 
-INC += drvSmarPod.hpp
+INC += drvSmarPod.h SmarPodParamDefs.h
 
 LIB_SRCS += drvSmarPod.cpp
 
