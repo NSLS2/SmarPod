@@ -8,11 +8,8 @@ dbLoadDatabase("$(TOP)/dbd/SmarPodApp.dbd")
 SmarPodApp_registerRecordDeviceDriver(pdbbase)
 
 # Define asyn port name
-epicsEnvSet("PORT", "DRV1")
+epicsEnvSet("PORT", "SP1")
 epicsEnvSet("PREFIX", "DEV:SP1:")
-
-
-
 
 SmarPodConfig("$(PORT)")
 

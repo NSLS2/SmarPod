@@ -36,9 +36,9 @@ CHECK_RELEASE = YES
 #CROSS_OPT = NO
 
 
-SMARPOD_SDK=/home/jwlodek/Workspace/smarpod-sdk/SmarPod
-SMARPOD_SDK_INCLUDE=$(SMARPOD_SDK)/SDK/C/include
-SMARPOD_SDK_LIB=$(SMARPOD_SDK)/SDK/Redistributables/x86_64
+SMARPOD_SDK=/nsls2/users/jwlodek/Workspace/smarpod-sdk/SmarPod
+SMARPOD_INCLUDE=$(SMARPOD_SDK)/SDK/C/include
+SMARPOD_LIB=$(SMARPOD_SDK)/SDK/Redistributables/x86_64
 
 # These allow developers to override the CONFIG_SITE variable
 # settings without having to modify the configure/CONFIG_SITE
