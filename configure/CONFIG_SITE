@@ -35,6 +35,7 @@ CHECK_RELEASE = YES
 #HOST_OPT = NO
 #CROSS_OPT = NO
 
+BUILD_IOCS = YES
 
 SMARPOD_SDK=/home/jwlodek/Workspace/smarpod-sdk/SmarPod
 SMARPOD_SDK_INCLUDE=$(SMARPOD_SDK)/SDK/C/include
