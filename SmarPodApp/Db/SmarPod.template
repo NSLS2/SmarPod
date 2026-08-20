@@ -1,6 +1,803 @@
-record(stringin, "$(PREFIX)Version_RBV") {
+#=============================================================================
+# SmarPod hexapod EPICS database
+#
+# Records expose the SmarPod API. Setpoints and their readbacks share a
+# single asyn drvInfo string (the paramdefs generator collapses them into one
+# parameter). Multi-component setters (pivot, coordinate system, axes
+# orientation, move target) are applied atomically via a dedicated command
+# record.
+#
+# Macros: P, PORT, ADDR, TIMEOUT
+#=============================================================================
+
+#---------------------------------------------------------------------------
+# Driver / library information
+#---------------------------------------------------------------------------
+record(stringin, "$(P)DriverVersion_RBV") {
     field(DTYP, "asynOctetRead")
-    field(DESC, "Version number of the port driver")
+    field(DESC, "Port driver version")
     field(SCAN, "I/O Intr")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_VERSION")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_DRIVER_VERSION")
+}
+
+record(stringin, "$(P)SDKVersion_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "SmarPod SDK library version")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SDK_VERSION")
+}
+
+record(stringin, "$(P)Locator_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Controller locator")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_LOCATOR")
+}
+
+record(ai, "$(P)ModelNumber_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Model number")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MODEL_NUMBER")
+}
+
+record(stringin, "$(P)ModelName_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Model name")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MODEL_NAME")
+}
+
+record(lsi, "$(P)StatusMessage_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Status message")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STATUS_MESSAGE")
+}
+
+#---------------------------------------------------------------------------
+# Closed-loop frequency
+#---------------------------------------------------------------------------
+record(longout, "$(P)MaxFrequency") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Max closed-loop frequency")
+    field(EGU,  "Hz")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MAX_FREQUENCY")
+}
+record(longin, "$(P)MaxFrequency_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Max closed-loop frequency")
+    field(EGU,  "Hz")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MAX_FREQUENCY")
+}
+
+#---------------------------------------------------------------------------
+# Velocity / speed control
+#---------------------------------------------------------------------------
+record(ao, "$(P)Speed") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Movement speed")
+    field(EGU,  "m/s")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED")
+}
+record(ai, "$(P)Speed_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Movement speed")
+    field(EGU,  "m/s")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED")
+}
+record(bo, "$(P)SpeedControl") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Enable speed control")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED_CONTROL")
+}
+record(bi, "$(P)SpeedControl_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Speed control state")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED_CONTROL")
+}
+
+#---------------------------------------------------------------------------
+# Acceleration control
+#---------------------------------------------------------------------------
+record(ao, "$(P)Acceleration") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Movement acceleration")
+    field(EGU,  "m/s2")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCELERATION")
+}
+record(ai, "$(P)Acceleration_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Movement acceleration")
+    field(EGU,  "m/s2")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCELERATION")
+}
+record(bo, "$(P)AccelControl") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Enable acceleration control")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCEL_CONTROL")
+}
+record(bi, "$(P)AccelControl_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Acceleration control state")
+    field(ZNAM, "Disabled")
+    field(ONAM, "Enabled")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCEL_CONTROL")
+}
+
+#---------------------------------------------------------------------------
+# Referencing and calibration
+#---------------------------------------------------------------------------
+record(bo, "$(P)FindReferenceMarks") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Find reference marks")
+    field(ZNAM, "Done")
+    field(ONAM, "Find")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REFERENCE_MARKS")
+}
+record(bo, "$(P)Calibrate") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Calibrate positioners")
+    field(ZNAM, "Done")
+    field(ONAM, "Calibrate")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CALIBRATE")
+}
+record(bi, "$(P)Referenced_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Referenced state")
+    field(ZNAM, "Not referenced")
+    field(ONAM, "Referenced")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_IS_REFERENCED")
+}
+record(ao, "$(P)FindRefAndCalibFreq") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Find-ref/calibration frequency")
+    field(EGU,  "Hz")
+    field(PREC, "3")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_AND_CALIB_FREQ")
+}
+record(ai, "$(P)FindRefAndCalibFreq_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Find-ref/calibration frequency")
+    field(EGU,  "Hz")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_AND_CALIB_FREQ")
+}
+record(mbbo, "$(P)FindRefMethod") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Reference-finding method")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "1")
+    field(ONST, "Sequential")
+    field(TWVL, "2")
+    field(TWST, "Z-Safe")
+    field(THVL, "3")
+    field(THST, "XY-Safe")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_METHOD")
+}
+record(mbbi, "$(P)FindRefMethod_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Reference-finding method")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "1")
+    field(ONST, "Sequential")
+    field(TWVL, "2")
+    field(TWST, "Z-Safe")
+    field(THVL, "3")
+    field(THST, "XY-Safe")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_METHOD")
+}
+record(mbbo, "$(P)FindRefDirX") {
+    field(DTYP, "asynInt32")
+    field(DESC, "X find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_X")
+}
+record(mbbi, "$(P)FindRefDirX_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "X find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_X")
+}
+record(mbbo, "$(P)FindRefDirY") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Y find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_Y")
+}
+record(mbbi, "$(P)FindRefDirY_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Y find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_Y")
+}
+record(mbbo, "$(P)FindRefDirZ") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Z find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_Z")
+}
+record(mbbi, "$(P)FindRefDirZ_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Z find-reference direction")
+    field(ZRVL, "0")
+    field(ZRST, "Default")
+    field(ONVL, "256")
+    field(ONST, "Positive")
+    field(TWVL, "512")
+    field(TWST, "Negative")
+    field(THVL, "4096")
+    field(THST, "Reverse")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_FIND_REF_DIR_Z")
+}
+
+#---------------------------------------------------------------------------
+# Sensor mode
+#---------------------------------------------------------------------------
+record(mbbo, "$(P)SensorMode") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Sensor power mode")
+    field(ZRVL, "0")
+    field(ZRST, "Disabled")
+    field(ONVL, "1")
+    field(ONST, "Enabled")
+    field(TWVL, "2")
+    field(TWST, "Powersave")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SENSOR_MODE")
+}
+record(mbbi, "$(P)SensorMode_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Sensor power mode")
+    field(ZRVL, "0")
+    field(ZRST, "Disabled")
+    field(ONVL, "1")
+    field(ONST, "Enabled")
+    field(TWVL, "2")
+    field(TWST, "Powersave")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SENSOR_MODE")
+}
+
+#---------------------------------------------------------------------------
+# Pivot point
+#---------------------------------------------------------------------------
+record(ao, "$(P)PivotX") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_X")
+}
+record(ai, "$(P)PivotX_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_X")
+}
+record(ao, "$(P)PivotY") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Y")
+}
+record(ai, "$(P)PivotY_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Y")
+}
+record(ao, "$(P)PivotZ") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Z")
+}
+record(ai, "$(P)PivotZ_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Pivot point Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Z")
+}
+record(bo, "$(P)SetPivot") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Apply pivot point")
+    field(ZNAM, "Done")
+    field(ONAM, "Apply")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SET_PIVOT")
+}
+record(mbbo, "$(P)PivotMode") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Pivot mode")
+    field(ZRVL, "0")
+    field(ZRST, "Relative")
+    field(ONVL, "1")
+    field(ONST, "Fixed")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_MODE")
+}
+record(mbbi, "$(P)PivotMode_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Pivot mode")
+    field(ZRVL, "0")
+    field(ZRST, "Relative")
+    field(ONVL, "1")
+    field(ONST, "Fixed")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_MODE")
+}
+
+#---------------------------------------------------------------------------
+# Current pose readback
+#---------------------------------------------------------------------------
+record(longin, "$(P)CheckPose_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Periodic pose/status poll")
+    field(SCAN, "1 second")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CHECK_POSE")
+}
+record(ai, "$(P)PoseX_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_X")
+}
+record(ai, "$(P)PoseY_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Y")
+}
+record(ai, "$(P)PoseZ_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Z")
+}
+record(ai, "$(P)PoseRx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RX")
+}
+record(ai, "$(P)PoseRy_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RY")
+}
+record(ai, "$(P)PoseRz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Current pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RZ")
+}
+
+#---------------------------------------------------------------------------
+# Move target + execution
+#---------------------------------------------------------------------------
+record(ao, "$(P)TargetX") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_X")
+}
+record(ai, "$(P)TargetX_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_X")
+}
+record(ao, "$(P)TargetY") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Y")
+}
+record(ai, "$(P)TargetY_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Y")
+}
+record(ao, "$(P)TargetZ") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Z")
+}
+record(ai, "$(P)TargetZ_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Z")
+}
+record(ao, "$(P)TargetRx") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RX")
+}
+record(ai, "$(P)TargetRx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RX")
+}
+record(ao, "$(P)TargetRy") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RY")
+}
+record(ai, "$(P)TargetRy_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RY")
+}
+record(ao, "$(P)TargetRz") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RZ")
+}
+record(ai, "$(P)TargetRz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Target pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RZ")
+}
+record(longout, "$(P)HoldTime") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Hold time after move")
+    field(EGU,  "ms")
+    field(DRVL, "0")
+    field(DRVH, "60000")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_HOLD_TIME")
+}
+record(longin, "$(P)HoldTime_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Hold time after move")
+    field(EGU,  "ms")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_HOLD_TIME")
+}
+record(bo, "$(P)WaitForCompletion") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Block move until complete")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_WAIT_FOR_COMPLETION")
+}
+record(bi, "$(P)WaitForCompletion_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Block move until complete")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_WAIT_FOR_COMPLETION")
+}
+record(bi, "$(P)PoseReachable_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Target pose reachable")
+    field(ZNAM, "No")
+    field(ONAM, "Yes")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_REACHABLE")
+}
+record(bo, "$(P)Move") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Move to target pose")
+    field(ZNAM, "Done")
+    field(ONAM, "Move")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MOVE")
+}
+record(bo, "$(P)Stop") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Stop motion")
+    field(ZNAM, "Done")
+    field(ONAM, "Stop")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STOP")
+}
+record(bo, "$(P)StopAndHold") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Stop and hold pose")
+    field(ZNAM, "Done")
+    field(ONAM, "Hold")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STOP_AND_HOLD")
+}
+record(bo, "$(P)Standby") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Put positioners in standby")
+    field(ZNAM, "Done")
+    field(ONAM, "Standby")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STANDBY")
+}
+record(mbbi, "$(P)MoveStatus_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Move status")
+    field(ZRVL, "0")
+    field(ZRST, "Stopped")
+    field(ONVL, "1")
+    field(ONST, "Holding")
+    field(TWVL, "2")
+    field(TWST, "Moving")
+    field(THVL, "3")
+    field(THST, "Calibrating")
+    field(FRVL, "4")
+    field(FRST, "Referencing")
+    field(FVVL, "5")
+    field(FVST, "Standby")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MOVE_STATUS")
+}
+
+#---------------------------------------------------------------------------
+# Coordinate system
+#---------------------------------------------------------------------------
+record(ao, "$(P)CoordSysX") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_X")
+}
+record(ai, "$(P)CoordSysX_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_X")
+}
+record(ao, "$(P)CoordSysY") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_Y")
+}
+record(ai, "$(P)CoordSysY_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_Y")
+}
+record(ao, "$(P)CoordSysZ") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_Z")
+}
+record(ai, "$(P)CoordSysZ_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_Z")
+}
+record(ao, "$(P)CoordSysRx") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RX")
+}
+record(ai, "$(P)CoordSysRx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RX")
+}
+record(ao, "$(P)CoordSysRy") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RY")
+}
+record(ai, "$(P)CoordSysRy_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RY")
+}
+record(ao, "$(P)CoordSysRz") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RZ")
+}
+record(ai, "$(P)CoordSysRz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Coordinate system RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RZ")
+}
+record(bo, "$(P)SetCoordSys") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Apply coordinate system")
+    field(ZNAM, "Done")
+    field(ONAM, "Apply")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SET_COORD_SYS")
+}
+record(bo, "$(P)SetCurrentPoseAsZero") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Set current pose as zero")
+    field(ZNAM, "Done")
+    field(ONAM, "Set")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SET_CURRENT_POSE_AS_ZERO")
+}
+
+#---------------------------------------------------------------------------
+# Axes orientation
+#---------------------------------------------------------------------------
+record(ao, "$(P)AxesRx") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RX")
+}
+record(ai, "$(P)AxesRx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RX")
+}
+record(ao, "$(P)AxesRy") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RY")
+}
+record(ai, "$(P)AxesRy_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RY")
+}
+record(ao, "$(P)AxesRz") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RZ")
+}
+record(ai, "$(P)AxesRz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Axes orientation RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RZ")
+}
+record(bo, "$(P)SetAxesOrientation") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Apply axes orientation")
+    field(ZNAM, "Done")
+    field(ONAM, "Apply")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SET_AXES_ORIENTATION")
+}
+
+#---------------------------------------------------------------------------
+# System configuration
+#---------------------------------------------------------------------------
+record(bo, "$(P)ConfigureSystem") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Configure MCS controller")
+    field(ZNAM, "Done")
+    field(ONAM, "Configure")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CONFIGURE_SYSTEM")
 }
