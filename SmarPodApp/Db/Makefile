@@ -12,6 +12,7 @@ include $(TOP)/configure/CONFIG
 # databases, templates, substitutions like this
 
 DB += SmarPod.template
+DB += SmarPod_StoredPose.template
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

@@ -307,7 +307,7 @@ MoveStatus SimHexapod::GetMoveStatus() {
 std::tuple<int, int, int> SimHexapodAPI::GetVersion() { return std::make_tuple(1, 0, 0); }
 
 std::vector<unsigned int> SimHexapodAPI::GetSupportedModels() {
-    return std::vector<unsigned int>{12345};
+    return std::vector<unsigned int>{0};
 }
 
 std::string SimHexapodAPI::GetModelName(unsigned int model) { return "Simulated Hexapod"; }

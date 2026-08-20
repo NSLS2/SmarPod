@@ -1,0 +1,1707 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2026-08-20 17:16:12 by jwlodek-->
+<display version="2.0.0">
+  <name>SmarPod Controller</name>
+  <macros>
+    <P>DEV:SP1:</P>
+  </macros>
+  <width>1500</width>
+  <height>900</height>
+  <background_color>
+    <color red="214" green="214" blue="214">
+    </color>
+  </background_color>
+  <widget type="label" version="2.0.0">
+    <name>TitleBar</name>
+    <text>SmarPod Controller - $(P)</text>
+    <width>1422</width>
+    <height>30</height>
+    <font>
+      <font family="Liberation Sans" style="BOLD" size="18.0">
+      </font>
+    </font>
+    <foreground_color>
+      <color red="255" green="255" blue="255">
+      </color>
+    </foreground_color>
+    <background_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </background_color>
+    <transparent>false</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Direct Input</name>
+    <x>270</x>
+    <y>40</y>
+    <width>729</width>
+    <height>464</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="label" version="2.0.0">
+      <name>ColSetpoint</name>
+      <text>Target</text>
+      <x>200</x>
+      <y>32</y>
+      <width>130</width>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ColReadback</name>
+      <text>Readback</text>
+      <x>478</x>
+      <y>32</y>
+      <width>130</width>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Xlbl</name>
+      <text>X</text>
+      <x>20</x>
+      <y>62</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX</name>
+      <pv_name>$(P)TargetX</pv_name>
+      <x>200</x>
+      <y>60</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseX</name>
+      <pv_name>$(P)PoseX_RBV</pv_name>
+      <x>478</x>
+      <y>60</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ylbl</name>
+      <text>Y</text>
+      <x>20</x>
+      <y>97</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetY</name>
+      <pv_name>$(P)TargetY</pv_name>
+      <x>200</x>
+      <y>95</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseY</name>
+      <pv_name>$(P)PoseY_RBV</pv_name>
+      <x>478</x>
+      <y>95</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Zlbl</name>
+      <text>Z</text>
+      <x>20</x>
+      <y>132</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetZ</name>
+      <pv_name>$(P)TargetZ</pv_name>
+      <x>200</x>
+      <y>130</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseZ</name>
+      <pv_name>$(P)PoseZ_RBV</pv_name>
+      <x>478</x>
+      <y>130</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RXlbl</name>
+      <text>RX</text>
+      <x>20</x>
+      <y>237</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx</name>
+      <pv_name>$(P)TargetRx</pv_name>
+      <x>200</x>
+      <y>235</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRx</name>
+      <pv_name>$(P)PoseRx_RBV</pv_name>
+      <x>478</x>
+      <y>235</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RYlbl</name>
+      <text>RY</text>
+      <x>20</x>
+      <y>272</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy</name>
+      <pv_name>$(P)TargetRy</pv_name>
+      <x>200</x>
+      <y>270</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRy</name>
+      <pv_name>$(P)PoseRy_RBV</pv_name>
+      <x>478</x>
+      <y>270</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RZlbl</name>
+      <text>RZ</text>
+      <x>20</x>
+      <y>307</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz</name>
+      <pv_name>$(P)TargetRz</pv_name>
+      <x>200</x>
+      <y>305</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRz</name>
+      <pv_name>$(P)PoseRz_RBV</pv_name>
+      <x>478</x>
+      <y>305</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveNowBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)Move</pv_name>
+          <value>1</value>
+          <description>Move Now</description>
+        </action>
+      </actions>
+      <text>Move</text>
+      <x>20</x>
+      <y>395</y>
+      <width>120</width>
+      <height>36</height>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="13.0">
+        </font>
+      </font>
+      <background_color>
+        <color red="128" green="179" blue="128">
+        </color>
+      </background_color>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>SpeedLbl</name>
+      <text>Speed [mm/s]</text>
+      <x>418</x>
+      <y>379</y>
+      <width>110</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Speed</name>
+      <pv_name>$(P)Speed</pv_name>
+      <x>418</x>
+      <y>401</y>
+      <width>110</width>
+      <height>28</height>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>HoldLbl</name>
+      <text>HoldTime</text>
+      <x>569</x>
+      <y>379</y>
+      <width>90</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>HoldTime</name>
+      <pv_name>$(P)HoldTime</pv_name>
+      <x>569</x>
+      <y>401</y>
+      <width>90</width>
+      <height>28</height>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ColSetpoint_1</name>
+      <text>Lower Limit</text>
+      <x>58</x>
+      <y>32</y>
+      <width>130</width>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX_1</name>
+      <pv_name>$(P)TargetX.DRVL</pv_name>
+      <x>58</x>
+      <y>60</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetY_1</name>
+      <pv_name>$(P)TargetY.DRVL</pv_name>
+      <x>58</x>
+      <y>95</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetZ_1</name>
+      <pv_name>$(P)TargetZ.DRVL</pv_name>
+      <x>58</x>
+      <y>130</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx_1</name>
+      <pv_name>$(P)TargetRx.DRVL</pv_name>
+      <x>58</x>
+      <y>235</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy_1</name>
+      <pv_name>$(P)TargetRy.DRVL</pv_name>
+      <x>58</x>
+      <y>270</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz_1</name>
+      <pv_name>$(P)TargetRz.DRVL</pv_name>
+      <x>58</x>
+      <y>305</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ColSetpoint_2</name>
+      <text>Upper Limit</text>
+      <x>340</x>
+      <y>32</y>
+      <width>130</width>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX_2</name>
+      <pv_name>$(P)TargetX.DRVH</pv_name>
+      <x>340</x>
+      <y>60</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetY_2</name>
+      <pv_name>$(P)TargetY.DRVH</pv_name>
+      <x>340</x>
+      <y>95</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetZ_2</name>
+      <pv_name>$(P)TargetZ.DRVH</pv_name>
+      <x>340</x>
+      <y>130</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx_2</name>
+      <pv_name>$(P)TargetRx.DRVH</pv_name>
+      <x>340</x>
+      <y>235</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy_2</name>
+      <pv_name>$(P)TargetRy.DRVH</pv_name>
+      <x>340</x>
+      <y>270</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz_2</name>
+      <pv_name>$(P)TargetRz.DRVH</pv_name>
+      <x>340</x>
+      <y>305</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_3</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>60</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_2</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>95</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_1</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>130</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_5</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>235</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_6</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>270</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_7</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>+</text>
+      <x>668</x>
+      <y>305</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_8</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>60</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_9</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>95</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_10</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>130</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_11</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>235</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_12</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>270</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_13</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>-</text>
+      <x>620</x>
+      <y>305</y>
+      <width>41</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ColSetpoint_3</name>
+      <text>Position Step</text>
+      <x>60</x>
+      <y>178</y>
+      <width>130</width>
+      <horizontal_alignment>2</horizontal_alignment>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX_3</name>
+      <pv_name>$(P)TargetX</pv_name>
+      <x>200</x>
+      <y>174</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ColSetpoint_4</name>
+      <text>Angle Step</text>
+      <x>58</x>
+      <y>355</y>
+      <width>130</width>
+      <horizontal_alignment>2</horizontal_alignment>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX_4</name>
+      <pv_name>$(P)TargetX</pv_name>
+      <x>198</x>
+      <y>351</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Stored Poses</name>
+    <x>1010</x>
+    <y>40</y>
+    <width>412</width>
+    <height>464</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display</name>
+      <macros>
+        <Num>1</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>10</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_1</name>
+      <macros>
+        <Num>2</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>50</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_2</name>
+      <macros>
+        <Num>3</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>90</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_3</name>
+      <macros>
+        <Num>4</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>130</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_4</name>
+      <macros>
+        <Num>5</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>170</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_5</name>
+      <macros>
+        <Num>6</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>210</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_6</name>
+      <macros>
+        <Num>7</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>250</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_7</name>
+      <macros>
+        <Num>8</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>290</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_8</name>
+      <macros>
+        <Num>9</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>20</x>
+      <y>330</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_41</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>Unprotect All</text>
+      <x>250</x>
+      <y>406</y>
+      <width>130</width>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_40</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>Protect All</text>
+      <x>39</x>
+      <y>406</y>
+      <width>130</width>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="embedded" version="2.0.0">
+      <name>Embedded Display_9</name>
+      <macros>
+        <Num>10</Num>
+      </macros>
+      <file>SmarPod_StoredPose_Row.bob</file>
+      <x>19</x>
+      <y>369</y>
+      <width>365</width>
+      <height>25</height>
+      <resize>2</resize>
+      <transparent>true</transparent>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <y>40</y>
+    <width>261</width>
+    <height>327</height>
+    <style>3</style>
+    <widget type="picture" version="2.0.0">
+      <name>Picture</name>
+      <file>CAD_MODEL_AND_LOGO.png</file>
+      <width>261</width>
+      <height>257</height>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>SmarPod Controller</text>
+      <y>272</y>
+      <width>261</width>
+      <font>
+        <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
+        </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SdkVer</name>
+      <pv_name>$(P)SDKVersion_RBV</pv_name>
+      <x>71</x>
+      <y>298</y>
+      <width>120</width>
+      <foreground_color>
+        <color name="Grid" red="128" green="128" blue="128">
+        </color>
+      </foreground_color>
+      <horizontal_alignment>1</horizontal_alignment>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <y>373</y>
+    <width>261</width>
+    <height>144</height>
+    <style>2</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="214" green="214" blue="214">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="label" version="2.0.0">
+      <name>PivotTitle_1</name>
+      <text></text>
+      <x>10</x>
+      <y>4</y>
+      <width>200</width>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="13.0">
+        </font>
+      </font>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>StopBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)Stop</pv_name>
+          <value>1</value>
+          <description>Stop</description>
+        </action>
+      </actions>
+      <text>Stop</text>
+      <x>5</x>
+      <y>4</y>
+      <width>139</width>
+      <height>40</height>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <background_color>
+        <color red="224" green="90" blue="90">
+        </color>
+      </background_color>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>StandbyBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)Standby</pv_name>
+          <value>1</value>
+          <description>Standby</description>
+        </action>
+      </actions>
+      <text>Standby</text>
+      <x>154</x>
+      <y>4</y>
+      <width>95</width>
+      <height>40</height>
+      <font>
+        <font family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </font>
+      <background_color>
+        <color red="150" green="190" blue="230">
+        </color>
+      </background_color>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>LED_1</name>
+      <x>10</x>
+      <y>50</y>
+      <square>true</square>
+      <rules>
+        <rule name="ShouldDisplay" prop_id="bit" out_exp="false">
+          <exp bool_exp="pv0==0">
+            <value>1</value>
+          </exp>
+          <pv_name>$(P)MoveStatus_RBV</pv_name>
+        </rule>
+      </rules>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>LED_4</name>
+      <x>130</x>
+      <y>50</y>
+      <square>true</square>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>LED_2</name>
+      <x>130</x>
+      <y>80</y>
+      <square>true</square>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>LED_3</name>
+      <x>10</x>
+      <y>80</y>
+      <square>true</square>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_1</name>
+      <text>Stopped</text>
+      <x>39</x>
+      <y>52</y>
+      <width>70</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_2</name>
+      <text>Standby</text>
+      <x>159</x>
+      <y>50</y>
+      <width>70</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_3</name>
+      <text>Holding</text>
+      <x>39</x>
+      <y>80</y>
+      <width>70</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_4</name>
+      <text>Moving</text>
+      <x>159</x>
+      <y>80</y>
+      <width>70</width>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>LED_5</name>
+      <x>10</x>
+      <y>110</y>
+      <off_color>
+        <color red="153" green="0" blue="0">
+        </color>
+      </off_color>
+      <on_color>
+        <color name="MAJOR" red="255" green="0" blue="0">
+        </color>
+      </on_color>
+      <square>true</square>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_5</name>
+      <text>Unreachable Pose</text>
+      <x>39</x>
+      <y>110</y>
+      <width>140</width>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_1</name>
+    <y>517</y>
+    <width>261</width>
+    <height>83</height>
+    <style>2</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="214" green="214" blue="214">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="action_button" version="3.0.0">
+      <name>ReferenceBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)FindReferenceMarks</pv_name>
+          <value>1</value>
+          <description>Reference</description>
+        </action>
+      </actions>
+      <text>Reference</text>
+      <x>10</x>
+      <y>46</y>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>ReferencedLed</name>
+      <pv_name>$(P)Referenced_RBV</pv_name>
+      <x>120</x>
+      <y>49</y>
+      <square>true</square>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ReferencedLbl</name>
+      <text>Referenced</text>
+      <x>149</x>
+      <y>49</y>
+      <width>80</width>
+    </widget>
+    <widget type="led" version="2.0.0">
+      <name>ReferencedLed_1</name>
+      <pv_name>$(P)Referenced_RBV</pv_name>
+      <x>120</x>
+      <y>15</y>
+      <square>true</square>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ReferencedLbl_1</name>
+      <text>Calibrated</text>
+      <x>149</x>
+      <y>15</y>
+      <width>80</width>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>ReferenceBtn_1</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)FindReferenceMarks</pv_name>
+          <value>1</value>
+          <description>Reference</description>
+        </action>
+      </actions>
+      <text>Calibrate</text>
+      <x>10</x>
+      <y>12</y>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_2</name>
+    <y>600</y>
+    <width>261</width>
+    <height>100</height>
+    <style>2</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="214" green="214" blue="214">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="textupdate" version="2.0.0">
+      <name>ModelName</name>
+      <pv_name>$(P)ModelName_RBV</pv_name>
+      <x>89</x>
+      <y>40</y>
+      <width>160</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>ModelLbl</name>
+      <text>Model</text>
+      <x>10</x>
+      <y>40</y>
+      <width>60</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>LocatorLbl</name>
+      <text>Locator</text>
+      <x>10</x>
+      <y>65</y>
+      <width>60</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Locator</name>
+      <pv_name>$(P)Locator_RBV</pv_name>
+      <x>89</x>
+      <y>65</y>
+      <width>160</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>DrvVerLbl</name>
+      <text>Driver Ver.</text>
+      <x>10</x>
+      <y>15</y>
+      <width>104</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>DrvVer</name>
+      <pv_name>$(P)DriverVersion_RBV</pv_name>
+      <x>89</x>
+      <y>15</y>
+      <width>160</width>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Coordinate System</name>
+    <x>1050</x>
+    <y>510</y>
+    <width>370</width>
+    <height>303</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>Current Pose as Zero</text>
+      <x>50</x>
+      <y>231</y>
+      <width>170</width>
+      <height>36</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>MoveZeroBtn_4</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <value>1</value>
+          <description>Set Current Pose As Zero</description>
+        </action>
+      </actions>
+      <text>Reset</text>
+      <x>239</x>
+      <y>231</y>
+      <width>79</width>
+      <height>36</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetX_5</name>
+      <pv_name>$(P)TargetX</pv_name>
+      <x>57</x>
+      <y>21</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetY_3</name>
+      <pv_name>$(P)TargetY</pv_name>
+      <x>57</x>
+      <y>56</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetZ_3</name>
+      <pv_name>$(P)TargetZ</pv_name>
+      <x>57</x>
+      <y>91</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseX_1</name>
+      <pv_name>$(P)PoseX_RBV</pv_name>
+      <x>209</x>
+      <y>21</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseY_1</name>
+      <pv_name>$(P)PoseY_RBV</pv_name>
+      <x>209</x>
+      <y>56</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseZ_1</name>
+      <pv_name>$(P)PoseZ_RBV</pv_name>
+      <x>209</x>
+      <y>91</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Xlbl_1</name>
+      <text>CX</text>
+      <x>9</x>
+      <y>21</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ylbl_1</name>
+      <text>CY</text>
+      <x>9</x>
+      <y>56</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Zlbl_1</name>
+      <text>CZ</text>
+      <x>9</x>
+      <y>91</y>
+      <width>30</width>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx_3</name>
+      <pv_name>$(P)TargetRx</pv_name>
+      <x>39</x>
+      <y>119</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy_3</name>
+      <pv_name>$(P)TargetRy</pv_name>
+      <x>39</x>
+      <y>154</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz_3</name>
+      <pv_name>$(P)TargetRz</pv_name>
+      <x>39</x>
+      <y>189</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRx_1</name>
+      <pv_name>$(P)PoseRx_RBV</pv_name>
+      <x>191</x>
+      <y>119</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRy_1</name>
+      <pv_name>$(P)PoseRy_RBV</pv_name>
+      <x>191</x>
+      <y>154</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRz_1</name>
+      <pv_name>$(P)PoseRz_RBV</pv_name>
+      <x>191</x>
+      <y>189</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RXlbl_1</name>
+      <text>CRX</text>
+      <x>9</x>
+      <y>119</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RYlbl_1</name>
+      <text>CRY</text>
+      <x>9</x>
+      <y>154</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RZlbl_1</name>
+      <text>CRZ</text>
+      <x>9</x>
+      <y>189</y>
+      <width>30</width>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Pivot Point</name>
+    <x>270</x>
+    <y>510</y>
+    <width>412</width>
+    <height>193</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="label" version="2.0.0">
+      <name>Label_6</name>
+      <text>Pivot Mode</text>
+      <x>9</x>
+      <y>134</y>
+    </widget>
+    <widget type="combo" version="2.0.0">
+      <name>Combo Box</name>
+      <pv_name>$(P)PivotMode</pv_name>
+      <x>89</x>
+      <y>134</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update</name>
+      <pv_name>$(P)PivotMode_RBV</pv_name>
+      <x>207</x>
+      <y>134</y>
+    </widget>
+    <widget type="action_button" version="3.0.0">
+      <name>SetPivotBtn</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetPivot</pv_name>
+          <value>1</value>
+          <description>Set Pivot</description>
+        </action>
+      </actions>
+      <text>Set Pivot</text>
+      <x>319</x>
+      <y>134</y>
+      <width>90</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx_4</name>
+      <pv_name>$(P)TargetRx</pv_name>
+      <x>77</x>
+      <y>17</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy_4</name>
+      <pv_name>$(P)TargetRy</pv_name>
+      <x>77</x>
+      <y>52</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz_4</name>
+      <pv_name>$(P)TargetRz</pv_name>
+      <x>77</x>
+      <y>87</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRx_2</name>
+      <pv_name>$(P)PoseRx_RBV</pv_name>
+      <x>229</x>
+      <y>17</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRy_2</name>
+      <pv_name>$(P)PoseRy_RBV</pv_name>
+      <x>229</x>
+      <y>52</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRz_2</name>
+      <pv_name>$(P)PoseRz_RBV</pv_name>
+      <x>229</x>
+      <y>87</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RXlbl_2</name>
+      <text>CRX</text>
+      <x>47</x>
+      <y>17</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RYlbl_2</name>
+      <text>CRY</text>
+      <x>47</x>
+      <y>52</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RZlbl_2</name>
+      <text>CRZ</text>
+      <x>47</x>
+      <y>87</y>
+      <width>30</width>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Axes Orientation</name>
+    <x>690</x>
+    <y>510</y>
+    <width>349</width>
+    <height>191</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="action_button" version="3.0.0">
+      <name>SetPivotBtn_1</name>
+      <actions>
+        <action type="write_pv">
+          <pv_name>$(P)SetPivot</pv_name>
+          <value>1</value>
+          <description>Set Pivot</description>
+        </action>
+      </actions>
+      <text>Set Pivot</text>
+      <x>240</x>
+      <y>121</y>
+      <width>90</width>
+      <height>28</height>
+      <tooltip>$(actions)</tooltip>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRx_5</name>
+      <pv_name>$(P)TargetRx</pv_name>
+      <x>39</x>
+      <y>11</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRy_5</name>
+      <pv_name>$(P)TargetRy</pv_name>
+      <x>39</x>
+      <y>46</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>TargetRz_5</name>
+      <pv_name>$(P)TargetRz</pv_name>
+      <x>39</x>
+      <y>81</y>
+      <width>130</width>
+      <height>28</height>
+      <background_color>
+        <color name="Button_Background" red="210" green="210" blue="210">
+        </color>
+      </background_color>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRx_3</name>
+      <pv_name>$(P)PoseRx_RBV</pv_name>
+      <x>191</x>
+      <y>11</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRy_3</name>
+      <pv_name>$(P)PoseRy_RBV</pv_name>
+      <x>191</x>
+      <y>46</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>PoseRz_3</name>
+      <pv_name>$(P)PoseRz_RBV</pv_name>
+      <x>191</x>
+      <y>81</y>
+      <width>130</width>
+      <height>28</height>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RXlbl_3</name>
+      <text>CRX</text>
+      <x>9</x>
+      <y>11</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RYlbl_3</name>
+      <text>CRY</text>
+      <x>9</x>
+      <y>46</y>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>RZlbl_3</name>
+      <text>CRZ</text>
+      <x>9</x>
+      <y>81</y>
+      <width>30</width>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Status</name>
+    <y>708</y>
+    <width>1039</width>
+    <height>71</height>
+    <style>1</style>
+    <foreground_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </foreground_color>
+    <line_color>
+      <color red="1" green="146" blue="77">
+      </color>
+    </line_color>
+    <background_color>
+      <color red="226" green="239" blue="218">
+      </color>
+    </background_color>
+    <widget type="textupdate" version="2.0.0">
+      <name>StatusMessage</name>
+      <pv_name>$(P)StatusMessage_RBV.$</pv_name>
+      <x>10</x>
+      <y>10</y>
+      <width>1001</width>
+      <height>33</height>
+      <transparent>true</transparent>
+      <format>6</format>
+      <vertical_alignment>1</vertical_alignment>
+    </widget>
+  </widget>
+</display>

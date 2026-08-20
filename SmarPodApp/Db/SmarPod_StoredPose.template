@@ -1,0 +1,153 @@
+record(ao, "$(P)Pose$(NUM):X") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose X")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_X")
+}
+record(ai, "$(P)Pose$(NUM):X_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose X")
+    field(VAL, "0")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_X")
+}
+record(ao, "$(P)Pose$(NUM):Y") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Y")
+}
+record(ai, "$(P)Pose$(NUM):Y_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose Y")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Y")
+}
+record(ao, "$(P)Pose$(NUM):Z") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Z")
+}
+record(ai, "$(P)Pose$(NUM):Z_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose Z")
+    field(EGU,  "m")
+    field(PREC, "6")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Z")
+}
+record(ao, "$(P)Pose$(NUM):Rx") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RX")
+}
+record(ai, "$(P)Pose$(NUM):Rx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RX")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RX")
+}
+record(ao, "$(P)Pose$(NUM):Ry") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RY")
+}
+record(ai, "$(P)Pose$(NUM):Ry_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RY")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RY")
+}
+record(ao, "$(P)Pose$(NUM):Rz") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RZ")
+}
+record(ai, "$(P)Pose$(NUM):Rz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Stored pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "6")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RZ")
+}
+
+record(bo, "$(P)Pose$(NUM):Store") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Store current pose to stored pose $(NUM)")
+    field(ZNAM, "Idle")
+    field(ONAM, "Store")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORE_POSE")
+}
+
+record(bo, "$(P)Pose$(NUM):Move") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Move to stored pose $(NUM)")
+    field(ZNAM, "Idle")
+    field(ONAM, "Move")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_MOVE_POSE")
+}
+
+record(bo, "$(P)Pose$(NUM):Clear") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Clear stored pose $(NUM)")
+    field(ZNAM, "Idle")
+    field(ONAM, "Clear")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CLEAR_POSE")
+}
+
+record(bo, "$(P)Pose$(NUM):Protect") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Protect stored pose $(NUM)")
+    field(ZNAM, "Unprotected")
+    field(ONAM, "Protected")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PROTECT_POSE")
+}
+
+record(bi, "$(P)Pose$(NUM):Protect_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Is stored pose $(NUM) protected?")
+    field(ZNAM, "Unprotected")
+    field(ONAM, "Protected")
+    field(VAL,  "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_PROTECTED")
+}
+
+record(stringout, "$(P)Pose$(NUM):Name") {
+    field(DTYP, "asynOctetWrite")
+    field(DESC, "Name of stored pose $(NUM)")
+    field(PINI, "YES")
+    field(VAL, "Pose $(NUM)")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_NAME")
+}
+record(stringin, "$(P)Pose$(NUM):Name_RBV") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Name of stored pose $(NUM)")
+    field(VAL,  "")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_NAME")
+}

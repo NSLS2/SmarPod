@@ -63,6 +63,8 @@
 #define SmarPod_AxesRyString "SMARPOD_AXES_RY"
 #define SmarPod_AxesRzString "SMARPOD_AXES_RZ"
 #define SmarPod_SetAxesOrientationString "SMARPOD_SET_AXES_ORIENTATION"
+#define SmarPod_ProtectAllPosesString "SMARPOD_PROTECT_ALL_POSES"
+#define SmarPod_UnprotectAllPosesString "SMARPOD_UNPROTECT_ALL_POSES"
 #define SmarPod_ConfigureSystemString "SMARPOD_CONFIGURE_SYSTEM"
 
 // Parameter index definitions
@@ -124,11 +126,13 @@ int SmarPod_AxesRx;
 int SmarPod_AxesRy;
 int SmarPod_AxesRz;
 int SmarPod_SetAxesOrientation;
+int SmarPod_ProtectAllPoses;
+int SmarPod_UnprotectAllPoses;
 int SmarPod_ConfigureSystem;
 
 #define SMARPOD_FIRST_PARAM SmarPod_DriverVersion
 #define SMARPOD_LAST_PARAM SmarPod_ConfigureSystem
 
-#define NUM_SMARPOD_PARAMS 59
+#define NUM_SMARPOD_PARAMS 61
 
 #endif

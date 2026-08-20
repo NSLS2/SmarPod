@@ -51,6 +51,7 @@ record(stringin, "$(P)ModelName_RBV") {
 record(lsi, "$(P)StatusMessage_RBV") {
     field(DTYP, "asynOctetRead")
     field(DESC, "Status message")
+    field(SIZV, "256")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STATUS_MESSAGE")
 }
@@ -455,45 +456,54 @@ record(ai, "$(P)PoseRz_RBV") {
 record(ao, "$(P)TargetX") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(VAL, "0")
+    field(PINI, "YES")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_X")
 }
 record(ai, "$(P)TargetX_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(VAL, "0")
+    field(EGU,  "mm")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_X")
 }
 record(ao, "$(P)TargetY") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(VAL, "0")
+    field(PINI, "YES")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Y")
 }
 record(ai, "$(P)TargetY_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Y")
 }
 record(ao, "$(P)TargetZ") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Z")
 }
 record(ai, "$(P)TargetZ_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_Z")
 }
@@ -501,14 +511,17 @@ record(ao, "$(P)TargetRx") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RX")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PINI, "YES")
+    field(PREC, "3")
+    field(VAL, "0")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RX")
 }
 record(ai, "$(P)TargetRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RX")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RX")
 }
@@ -516,14 +529,16 @@ record(ao, "$(P)TargetRy") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RY")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PINI, "YES")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RY")
 }
 record(ai, "$(P)TargetRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RY")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RY")
 }
@@ -531,14 +546,17 @@ record(ao, "$(P)TargetRz") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RZ")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(PINI, "YES")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RZ")
 }
 record(ai, "$(P)TargetRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RZ")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RZ")
 }
@@ -546,6 +564,8 @@ record(longout, "$(P)HoldTime") {
     field(DTYP, "asynInt32")
     field(DESC, "Hold time after move")
     field(EGU,  "ms")
+    field(PINI, "YES")
+    field(VAL, "60000")
     field(DRVL, "0")
     field(DRVH, "60000")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_HOLD_TIME")
@@ -554,31 +574,9 @@ record(longin, "$(P)HoldTime_RBV") {
     field(DTYP, "asynInt32")
     field(DESC, "Hold time after move")
     field(EGU,  "ms")
+    field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_HOLD_TIME")
-}
-record(bo, "$(P)WaitForCompletion") {
-    field(DTYP, "asynInt32")
-    field(DESC, "Block move until complete")
-    field(ZNAM, "No")
-    field(ONAM, "Yes")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_WAIT_FOR_COMPLETION")
-}
-record(bi, "$(P)WaitForCompletion_RBV") {
-    field(DTYP, "asynInt32")
-    field(DESC, "Block move until complete")
-    field(ZNAM, "No")
-    field(ONAM, "Yes")
-    field(SCAN, "I/O Intr")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_WAIT_FOR_COMPLETION")
-}
-record(bi, "$(P)PoseReachable_RBV") {
-    field(DTYP, "asynInt32")
-    field(DESC, "Target pose reachable")
-    field(ZNAM, "No")
-    field(ONAM, "Yes")
-    field(SCAN, "I/O Intr")
-    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_REACHABLE")
 }
 record(bo, "$(P)Move") {
     field(DTYP, "asynInt32")
@@ -593,13 +591,6 @@ record(bo, "$(P)Stop") {
     field(ZNAM, "Done")
     field(ONAM, "Stop")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STOP")
-}
-record(bo, "$(P)StopAndHold") {
-    field(DTYP, "asynInt32")
-    field(DESC, "Stop and hold pose")
-    field(ZNAM, "Done")
-    field(ONAM, "Hold")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STOP_AND_HOLD")
 }
 record(bo, "$(P)Standby") {
     field(DTYP, "asynInt32")
@@ -800,4 +791,20 @@ record(bo, "$(P)ConfigureSystem") {
     field(ZNAM, "Done")
     field(ONAM, "Configure")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CONFIGURE_SYSTEM")
+}
+
+record(bo, "$(P)ProtectAllPoses") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Protect all poses")
+    field(ZNAM, "Done")
+    field(ONAM, "Protect")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PROTECT_ALL_POSES")
+}
+
+record(bo, "$(P)UnprotectAllPoses") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Unprotect all poses")
+    field(ZNAM, "Done")
+    field(ONAM, "Unprotect")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_UNPROTECT_ALL_POSES")
 }

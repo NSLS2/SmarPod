@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2026-08-20 17:14:54 by jwlodek-->
+<display version="2.0.0">
+  <name>SmarPod Stored Pose Row</name>
+  <width>365</width>
+  <height>25</height>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>$(P)Pose$(Num):Move</pv_name>
+        <value>1</value>
+        <description>Move to pose</description>
+      </action>
+    </actions>
+    <text>M</text>
+    <width>25</width>
+    <height>25</height>
+    <background_color>
+      <color red="128" green="179" blue="128">
+      </color>
+    </background_color>
+    <tooltip>Move to pose</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_1</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>$(P)Pose$(Num):Store</pv_name>
+        <value>1</value>
+        <description>Store current position</description>
+      </action>
+    </actions>
+    <text>S</text>
+    <x>250</x>
+    <width>25</width>
+    <height>25</height>
+    <background_color>
+      <color red="204" green="102" blue="51">
+      </color>
+    </background_color>
+    <tooltip>Store current postition</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_2</name>
+    <actions>
+      <action type="open_display">
+        <file>SmarPod_EditStoredPose.bob</file>
+        <target>tab</target>
+        <description>Edit Pose</description>
+      </action>
+    </actions>
+    <text>E</text>
+    <x>280</x>
+    <width>25</width>
+    <height>25</height>
+    <background_color>
+      <color red="230" green="230" blue="77">
+      </color>
+    </background_color>
+    <tooltip>Edit pose</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_3</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>$(P)Pose$(Num):Clear</pv_name>
+        <value>1</value>
+        <description>Clear pose</description>
+      </action>
+    </actions>
+    <text>C</text>
+    <x>310</x>
+    <width>25</width>
+    <height>25</height>
+    <background_color>
+      <color red="153" green="179" blue="255">
+      </color>
+    </background_color>
+    <tooltip>Clear pose</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_4</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>$(P)Pose$(Num):Protect</pv_name>
+        <value>1</value>
+        <description>Protect Pose</description>
+      </action>
+    </actions>
+    <text>P</text>
+    <x>340</x>
+    <width>25</width>
+    <height>25</height>
+    <tooltip>Protect stored pose</tooltip>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update</name>
+    <pv_name>$(P)Pose$(Num):Name_RBV</pv_name>
+    <x>35</x>
+    <width>210</width>
+    <height>25</height>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+</display>

@@ -6,9 +6,6 @@ include $(TOP)/configure/CONFIG
 PROD_NAME = SmarPodApp
 PROD_IOC += $(PROD_NAME)
 
-USR_LDFLAGS += -L$(SMARPOD_SDK_LIB)
-USR_LDFLAGS += -Wl,-rpath-link,$(SMARPOD_SDK_LIB)
-
 # <name>.dbd will be created from <name>Include.dbd
 DBD += $(PROD_NAME).dbd
 $(PROD_NAME)_DBD += drvSmarPodSupport.dbd
@@ -20,7 +17,8 @@ $(PROD_NAME)_SRCS += $(PROD_NAME)_registerRecordDeviceDriver.cpp $(PROD_NAME)Mai
 $(PROD_NAME)_LIBS += drvSmarPod asyn busy autosave devIocStats $(EPICS_BASE_IOC_LIBS)
 
 ifdef SMARPOD_SDK
-$(PROD_NAME)_SYS_LIBS += smarpod
+smarpod_DIR = $(SMARPOD_SDK_LIB)
+$(PROD_NAME)_LIBS += smarpod
 endif
 
 include $(TOP)/configure/RULES

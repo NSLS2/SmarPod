@@ -47,18 +47,18 @@ class SimHexapod : public Hexapod {
     private:
         bool referenced = false, calibrated = false;
         Pose currentPose = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        SensorMode sensorMode = SensorMode::DISABLED;
+        SensorMode sensorMode = SensorMode::POWERSAVE;
         PivotMode pivotMode = PivotMode::RELATIVE;
         FrefDirection xFrefDir = FrefDirection::DEFAULT, yFrefDir = FrefDirection::DEFAULT,
                       zFrefDir = FrefDirection::DEFAULT;
         FrefMethod frefMethod = FrefMethod::DEFAULT;
         std::atomic<MoveStatus> moveStatus{MoveStatus::STOPPED};
-        double speed = 0.001, acceleration = 0;  // speed-control defaults to 1 mm/s
+        double speed = 0.001, acceleration = 0.01;  // 1 mm/s, 10 mm/s^2
         bool speedControlEnabled = true, acclControlEnabled = false;
         Pose coordSystem = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         std::string locator = "sim:123456";
-        unsigned int maxFrequency = 0;
-        double frefAndCalibFreq = 0;
+        unsigned int maxFrequency = 18500;  // Hz, typical SmarPod default
+        double frefAndCalibFreq = 8000;
         double pivotX = 0, pivotY = 0, pivotZ = 0;
         double axisRx = 0, axisRy = 0, axisRz = 0;
 
