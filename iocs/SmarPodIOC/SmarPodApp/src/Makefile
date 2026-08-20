@@ -19,6 +19,10 @@ $(PROD_NAME)_SRCS += $(PROD_NAME)_registerRecordDeviceDriver.cpp $(PROD_NAME)Mai
 
 $(PROD_NAME)_LIBS += drvSmarPod asyn busy autosave devIocStats $(EPICS_BASE_IOC_LIBS)
 
+ifdef SMARPOD_SDK
+$(PROD_NAME)_SYS_LIBS += smarpod
+endif
+
 include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
