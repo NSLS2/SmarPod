@@ -4,6 +4,9 @@ TabWidth: 4
 UseTab: Never
 ColumnLimit: 100
 
+# Access modifiers get their own indent level; members are indented one level deeper
+IndentAccessModifiers: true
+
 # pointers/references are aligned to the type
 DerivePointerAlignment: false
 PointerAlignment: Left

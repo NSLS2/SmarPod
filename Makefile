@@ -3,7 +3,9 @@ TOP = .
 include $(TOP)/configure/CONFIG
 DIRS := $(DIRS) configure
 DIRS := $(DIRS) SmarPodApp
+DIRS := $(DIRS) SmarPodSupport
 SmarPodApp_DEPEND_DIRS   += configure
+SmarPodApp_DEPEND_DIRS   += SmarPodSupport
 
 ifeq ($(BUILD_IOCS), YES)
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocs))
