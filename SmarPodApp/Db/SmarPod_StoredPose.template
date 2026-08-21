@@ -1,31 +1,31 @@
 record(ao, "$(P)Pose$(NUM):X") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_X")
 }
 record(ai, "$(P)Pose$(NUM):X_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose X")
     field(VAL, "0")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_X")
 }
 record(ao, "$(P)Pose$(NUM):Y") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Y")
 }
 record(ai, "$(P)Pose$(NUM):Y_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Y")
@@ -33,15 +33,15 @@ record(ai, "$(P)Pose$(NUM):Y_RBV") {
 record(ao, "$(P)Pose$(NUM):Z") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Z")
 }
 record(ai, "$(P)Pose$(NUM):Z_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_Z")
@@ -49,15 +49,15 @@ record(ai, "$(P)Pose$(NUM):Z_RBV") {
 record(ao, "$(P)Pose$(NUM):Rx") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RX")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RX")
 }
 record(ai, "$(P)Pose$(NUM):Rx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RX")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RX")
@@ -65,15 +65,15 @@ record(ai, "$(P)Pose$(NUM):Rx_RBV") {
 record(ao, "$(P)Pose$(NUM):Ry") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RY")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RY")
 }
 record(ai, "$(P)Pose$(NUM):Ry_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RY")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RY")
@@ -81,15 +81,15 @@ record(ai, "$(P)Pose$(NUM):Ry_RBV") {
 record(ao, "$(P)Pose$(NUM):Rz") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RZ")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RZ")
 }
 record(ai, "$(P)Pose$(NUM):Rz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Stored pose RZ")
-    field(EGU,  "deg")
-    field(PREC, "6")
+    field(EGU,  "mdeg")
+    field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_STORED_POSE_RZ")

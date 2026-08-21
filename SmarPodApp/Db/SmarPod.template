@@ -4,7 +4,7 @@
 # Records expose the SmarPod API. Setpoints and their readbacks share a
 # single asyn drvInfo string (the paramdefs generator collapses them into one
 # parameter). Multi-component setters (pivot, coordinate system, axes
-# orientation, move target) are applied atomically via a dedicated command
+# orientation, move target) are applied atomically via a dedicated coumand
 # record.
 #
 # Macros: P, PORT, ADDR, TIMEOUT
@@ -79,14 +79,14 @@ record(longin, "$(P)MaxFrequency_RBV") {
 record(ao, "$(P)Speed") {
     field(DTYP, "asynFloat64")
     field(DESC, "Movement speed")
-    field(EGU,  "m/s")
+    field(EGU,  "um/s")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED")
 }
 record(ai, "$(P)Speed_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Movement speed")
-    field(EGU,  "m/s")
+    field(EGU,  "um/s")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_SPEED")
@@ -113,14 +113,14 @@ record(bi, "$(P)SpeedControl_RBV") {
 record(ao, "$(P)Acceleration") {
     field(DTYP, "asynFloat64")
     field(DESC, "Movement acceleration")
-    field(EGU,  "m/s2")
+    field(EGU,  "um/s2")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCELERATION")
 }
 record(ai, "$(P)Acceleration_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Movement acceleration")
-    field(EGU,  "m/s2")
+    field(EGU,  "um/s2")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_ACCELERATION")
@@ -331,45 +331,45 @@ record(mbbi, "$(P)SensorMode_RBV") {
 record(ao, "$(P)PivotX") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_X")
 }
 record(ai, "$(P)PivotX_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_X")
 }
 record(ao, "$(P)PivotY") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Y")
 }
 record(ai, "$(P)PivotY_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Y")
 }
 record(ao, "$(P)PivotZ") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Z")
 }
 record(ai, "$(P)PivotZ_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Pivot point Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "um")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PIVOT_Z")
 }
@@ -409,10 +409,11 @@ record(longin, "$(P)CheckPose_RBV") {
     field(SCAN, "1 second")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CHECK_POSE")
 }
+
 record(ai, "$(P)PoseX_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose X")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_X")
@@ -420,7 +421,7 @@ record(ai, "$(P)PoseX_RBV") {
 record(ai, "$(P)PoseY_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose Y")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Y")
@@ -428,7 +429,7 @@ record(ai, "$(P)PoseY_RBV") {
 record(ai, "$(P)PoseZ_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose Z")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Z")
@@ -436,7 +437,7 @@ record(ai, "$(P)PoseZ_RBV") {
 record(ai, "$(P)PoseRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RX")
@@ -444,7 +445,7 @@ record(ai, "$(P)PoseRx_RBV") {
 record(ai, "$(P)PoseRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RY")
@@ -452,7 +453,7 @@ record(ai, "$(P)PoseRy_RBV") {
 record(ai, "$(P)PoseRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RZ")
@@ -464,7 +465,7 @@ record(ai, "$(P)PoseRz_RBV") {
 record(ao, "$(P)TargetX") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose X")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(VAL, "0")
     field(PINI, "YES")
     field(PREC, "3")
@@ -474,7 +475,7 @@ record(ai, "$(P)TargetX_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose X")
     field(VAL, "0")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_X")
@@ -482,7 +483,7 @@ record(ai, "$(P)TargetX_RBV") {
 record(ao, "$(P)TargetY") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Y")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(VAL, "0")
     field(PINI, "YES")
     field(PREC, "3")
@@ -491,7 +492,7 @@ record(ao, "$(P)TargetY") {
 record(ai, "$(P)TargetY_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Y")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
@@ -500,7 +501,7 @@ record(ai, "$(P)TargetY_RBV") {
 record(ao, "$(P)TargetZ") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Z")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PINI, "YES")
     field(VAL, "0")
     field(PREC, "3")
@@ -509,7 +510,7 @@ record(ao, "$(P)TargetZ") {
 record(ai, "$(P)TargetZ_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose Z")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
@@ -518,7 +519,7 @@ record(ai, "$(P)TargetZ_RBV") {
 record(ao, "$(P)TargetRx") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PINI, "YES")
     field(PREC, "3")
     field(VAL, "0")
@@ -527,7 +528,7 @@ record(ao, "$(P)TargetRx") {
 record(ai, "$(P)TargetRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
@@ -536,7 +537,7 @@ record(ai, "$(P)TargetRx_RBV") {
 record(ao, "$(P)TargetRy") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PINI, "YES")
     field(PREC, "3")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RY")
@@ -544,7 +545,7 @@ record(ao, "$(P)TargetRy") {
 record(ai, "$(P)TargetRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
@@ -553,7 +554,7 @@ record(ai, "$(P)TargetRy_RBV") {
 record(ao, "$(P)TargetRz") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(VAL, "0")
     field(PINI, "YES")
@@ -562,7 +563,7 @@ record(ao, "$(P)TargetRz") {
 record(ai, "$(P)TargetRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Target pose RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
@@ -572,12 +573,12 @@ record(ai, "$(P)TargetRz_RBV") {
 #---------------------------------------------------------------------------
 # Target tweak up/down
 #
-# Position axes step by PositionStep (mm); rotation axes by AngleStep (deg).
+# Position axes step by PositionStep (um); rotation axes by AngleStep (mdeg).
 #---------------------------------------------------------------------------
 record(ao, "$(P)PositionStep") {
     field(DTYP, "Soft Channel")
     field(DESC, "Linear tweak step")
-    field(EGU,  "mm")
+    field(EGU,  "um")
     field(PREC, "3")
     field(PINI, "YES")
     field(VAL,  "0.2")
@@ -585,7 +586,7 @@ record(ao, "$(P)PositionStep") {
 record(ao, "$(P)AngleStep") {
     field(DTYP, "Soft Channel")
     field(DESC, "Angular tweak step")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "3")
     field(PINI, "YES")
     field(VAL,  "1.0")
@@ -806,14 +807,14 @@ record(ai, "$(P)CoordSysZ_RBV") {
 record(ao, "$(P)CoordSysRx") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RX")
 }
 record(ai, "$(P)CoordSysRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RX")
@@ -821,14 +822,14 @@ record(ai, "$(P)CoordSysRx_RBV") {
 record(ao, "$(P)CoordSysRy") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RY")
 }
 record(ai, "$(P)CoordSysRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RY")
@@ -836,14 +837,14 @@ record(ai, "$(P)CoordSysRy_RBV") {
 record(ao, "$(P)CoordSysRz") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RZ")
 }
 record(ai, "$(P)CoordSysRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Coordinate system RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_COORD_SYS_RZ")
@@ -869,14 +870,14 @@ record(bo, "$(P)SetCurrentPoseAsZero") {
 record(ao, "$(P)AxesRx") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RX")
 }
 record(ai, "$(P)AxesRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RX")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RX")
@@ -884,14 +885,14 @@ record(ai, "$(P)AxesRx_RBV") {
 record(ao, "$(P)AxesRy") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RY")
 }
 record(ai, "$(P)AxesRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RY")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RY")
@@ -899,14 +900,14 @@ record(ai, "$(P)AxesRy_RBV") {
 record(ao, "$(P)AxesRz") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RZ")
 }
 record(ai, "$(P)AxesRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Axes orientation RZ")
-    field(EGU,  "deg")
+    field(EGU,  "mdeg")
     field(PREC, "6")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_AXES_RZ")

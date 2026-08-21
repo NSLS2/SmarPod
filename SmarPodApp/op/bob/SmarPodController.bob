@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-08-21 11:12:50 by jwlodek-->
+<!--Saved on 2026-08-21 11:33:16 by jwlodek-->
 <display version="2.0.0">
   <name>SmarPod Controller</name>
   <macros>
@@ -870,7 +870,7 @@
     <style>3</style>
     <widget type="picture" version="2.0.0">
       <name>Picture</name>
-      <file>CAD_MODEL_AND_LOGO.png</file>
+      <file>SmarPod_CAD.png</file>
       <width>261</width>
       <height>257</height>
     </widget>
@@ -888,7 +888,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>SdkVer</name>
-      <pv_name>$(P)SDKVersion_RBV</pv_name>
+      <pv_name>$(P)DriverVersion_RBV</pv_name>
       <x>71</x>
       <y>298</y>
       <width>120</width>
@@ -1280,14 +1280,14 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>DrvVerLbl</name>
-      <text>Driver Ver.</text>
+      <text>SDK Ver</text>
       <x>10</x>
       <y>15</y>
       <width>104</width>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>DrvVer</name>
-      <pv_name>$(P)DriverVersion_RBV</pv_name>
+      <pv_name>$(P)SDKVersion_RBV</pv_name>
       <x>89</x>
       <y>15</y>
       <width>160</width>
@@ -1536,19 +1536,20 @@
       <name>Label_6</name>
       <text>Pivot Mode</text>
       <x>9</x>
-      <y>134</y>
+      <y>139</y>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>Combo Box</name>
       <pv_name>$(P)PivotMode</pv_name>
       <x>89</x>
       <y>134</y>
+      <height>25</height>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update</name>
       <pv_name>$(P)PivotMode_RBV</pv_name>
-      <x>207</x>
-      <y>134</y>
+      <x>205</x>
+      <y>137</y>
     </widget>
     <widget type="action_button" version="3.0.0">
       <name>SetPivotBtn</name>
@@ -1560,15 +1561,15 @@
         </action>
       </actions>
       <text>Set Pivot</text>
-      <x>319</x>
-      <y>134</y>
-      <width>90</width>
+      <x>328</x>
+      <y>132</y>
+      <width>70</width>
       <height>28</height>
       <tooltip>$(actions)</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TargetRx_4</name>
-      <pv_name>$(P)TargetRx</pv_name>
+      <pv_name>$(P)PivotX</pv_name>
       <x>77</x>
       <y>17</y>
       <width>130</width>
@@ -1580,7 +1581,7 @@
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TargetRy_4</name>
-      <pv_name>$(P)TargetRy</pv_name>
+      <pv_name>$(P)PivotY</pv_name>
       <x>77</x>
       <y>52</y>
       <width>130</width>
@@ -1592,7 +1593,7 @@
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TargetRz_4</name>
-      <pv_name>$(P)TargetRz</pv_name>
+      <pv_name>$(P)PivotZ</pv_name>
       <x>77</x>
       <y>87</y>
       <width>130</width>
@@ -1604,7 +1605,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>PoseRx_2</name>
-      <pv_name>$(P)PoseRx_RBV</pv_name>
+      <pv_name>$(P)PivotX_RBV</pv_name>
       <x>229</x>
       <y>17</y>
       <width>130</width>
@@ -1613,7 +1614,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>PoseRy_2</name>
-      <pv_name>$(P)PoseRy_RBV</pv_name>
+      <pv_name>$(P)PivotY_RBV</pv_name>
       <x>229</x>
       <y>52</y>
       <width>130</width>
@@ -1622,7 +1623,7 @@
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>PoseRz_2</name>
-      <pv_name>$(P)PoseRz_RBV</pv_name>
+      <pv_name>$(P)PivotZ_RBV</pv_name>
       <x>229</x>
       <y>87</y>
       <width>130</width>
@@ -1631,23 +1632,23 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>RXlbl_2</name>
-      <text>CRX</text>
+      <text>PX</text>
       <x>47</x>
-      <y>17</y>
+      <y>23</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RYlbl_2</name>
-      <text>CRY</text>
+      <text>PY</text>
       <x>47</x>
-      <y>52</y>
+      <y>58</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RZlbl_2</name>
-      <text>CRZ</text>
+      <text>PZ</text>
       <x>47</x>
-      <y>87</y>
+      <y>93</y>
       <width>30</width>
     </widget>
   </widget>
