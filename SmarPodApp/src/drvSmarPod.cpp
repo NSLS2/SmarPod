@@ -91,6 +91,18 @@ extern "C" int SmarPodSetLogLevel(int logLevel) {
     return (asynSuccess);
 }
 
+
+extern "C" void referenceThread(void* pPvt) {
+    SmarPod* pSmarPod = (SmarPod*) pPvt;
+  pSmarPod->reference();
+}
+
+
+extern "C" void calibrateThread(void* pPvt) {
+    SmarPod* pSmarPod = (SmarPod*) pPvt;
+    pSmarPod->calibrate();
+}
+
 /**
  * @brief Callback function called when IOC is terminated.
  *
@@ -105,14 +117,39 @@ static bool isLocatorSim(const char* locator) {
     return (locator == nullptr || strncmp(locator, "sim:", 4) == 0);
 }
 
+void SmarPod::reference() {
+    try {
+        this->pHexapod->FindReferenceMarks();
+        this->updatePoseAndStatus();
+        setIntegerParam(SmarPod_IsReferenced, static_cast<int>(this->pHexapod->IsReferenced()));
+        callParamCallbacks();
+    } catch (const std::exception& e) {
+        spdlog::error("Error during reference: {}", e.what());
+        setIntegerParam(SmarPod_IsReferenced, 0);
+        callParamCallbacks();
+    }
+}
 
-// void SmarPod::spawnMoveThread(){
-//     epicsThreadOpts opts;
-//     opts.joinable = true;
-//     opts.stackSize = epicsThreadGetStackSize(epicsThreadStackMedium);
-//     opts.priority = epicsThreadPriorityMedium;
-//     moveThread = epicsThreadCreateOpts(
-// }
+void SmarPod::calibrate() {
+    try {
+        this->pHexapod->Calibrate();
+        this->updatePoseAndStatus();
+    } catch (const std::exception& e) {
+        spdlog::error("Error during calibration: {}", e.what());
+    }
+}
+
+void SmarPod::spawnMoveThread(void(*threadFunc)(void*), const char* threadName) {
+    epicsThreadOpts opts;
+    opts.joinable = true;
+    opts.stackSize = epicsThreadGetStackSize(epicsThreadStackMedium);
+    opts.priority = epicsThreadPriorityMedium;
+    this->moveThreadId = epicsThreadCreateOpt(
+        threadName,
+        (EPICSTHREADFUNC)threadFunc,
+        this,
+        &opts);
+}
 
 
 /**
@@ -132,21 +169,11 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     try {
         if (function == SmarPod_FindReferenceMarks && value) {
-            this->pHexapod->FindReferenceMarks();
-            this->updatePoseAndStatus();
+            this->spawnMoveThread(referenceThread, "SmarPodReferenceThread");
         } else if (function == SmarPod_Calibrate && value) {
-            this->pHexapod->Calibrate();
+            this->spawnMoveThread(calibrateThread, "SmarPodCalibrateThread");
         } else if (function == SmarPod_Move && value) {
-            Pose target;
-            getDoubleParam(SmarPod_TargetX, &target.x);
-            getDoubleParam(SmarPod_TargetY, &target.y);
-            getDoubleParam(SmarPod_TargetZ, &target.z);
-            getDoubleParam(SmarPod_TargetRx, &target.rx);
-            getDoubleParam(SmarPod_TargetRy, &target.ry);
-            getDoubleParam(SmarPod_TargetRz, &target.rz);
-            int holdTime, wait;
-            getIntegerParam(SmarPod_HoldTime, &holdTime);
-            this->pHexapod->Move(target, static_cast<unsigned int>(holdTime), 0);
+           this->spawnMoveThread(moveThread, "SmarPodMoveThread");
         } else if (function == SmarPod_Stop && value) {
             int holdTime;
             getIntegerParam(SmarPod_HoldTime, &holdTime);
@@ -155,8 +182,16 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             } else {
                 this->pHexapod->StopAndHold(static_cast<unsigned int>(holdTime));
             }
+            if (this->moveThreadId) {
+                epicsThreadMustJoin(this->moveThreadId);
+                this->moveThreadId = nullptr;
+            }
         } else if (function == SmarPod_Standby && value) {
             this->pHexapod->Standby();
+            if(this->moveThreadId != nullptr) {
+                epicsThreadMustJoin(this->moveThreadId);
+                this->moveThreadId = nullptr;
+            }
         } else if (function == SmarPod_SetPivot && value) {
             double x, y, z;
             getDoubleParam(SmarPod_PivotX, &x);
@@ -167,6 +202,7 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             setDoubleParam(SmarPod_PivotX, px);
             setDoubleParam(SmarPod_PivotY, py);
             setDoubleParam(SmarPod_PivotZ, pz);
+            updatePoseAndStatus();
             spdlog::info("Set pivot to ({}, {}, {})", px, py, pz);
         } else if (function == SmarPod_SetCoordSys && value) {
             Pose csys;
@@ -184,6 +220,7 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             setDoubleParam(SmarPod_CoordSysRx, newCsys.rx);
             setDoubleParam(SmarPod_CoordSysRy, newCsys.ry);
             setDoubleParam(SmarPod_CoordSysRz, newCsys.rz);
+            updatePoseAndStatus();
             spdlog::info("Set coordinate system to ({}, {}, {}, {}, {}, {})",
                          newCsys.x, newCsys.y, newCsys.z, newCsys.rx, newCsys.ry, newCsys.rz);
         } else if (function == SmarPod_SetCurrentPoseAsZero && value) {
@@ -198,6 +235,7 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             setDoubleParam(SmarPod_AxesRx, newRx);
             setDoubleParam(SmarPod_AxesRy, newRy);
             setDoubleParam(SmarPod_AxesRz, newRz);
+            updatePoseAndStatus();
             spdlog::info("Set axes orientation to ({}, {}, {})", newRx, newRy, newRz);
         } else if (function == SmarPod_MaxFrequency) {
             this->pHexapod->SetMaxFrequency(static_cast<unsigned int>(value));
@@ -248,6 +286,10 @@ asynStatus SmarPod::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             setDoubleParam(SmarPod_Acceleration, newAccel);
             setIntegerParam(SmarPod_AccelControl, newControl);
             spdlog::info("Set acceleration to {} with control {}", newAccel, newControl ? "enabled" : "disabled");
+        } else if (function == SmarPod_ProtectAllPoses) {
+            for (auto& pose : this->storedPoses) {
+                pose->modifyProtectionStatus(value != 0);
+            }
         } else if (function < SMARPOD_FIRST_PARAM) {
             status = asynPortDriver::writeInt32(pasynUser, value);
         } else {
@@ -299,6 +341,10 @@ asynStatus SmarPod::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
             double freq = this->pHexapod->GetFindRefAndCalibFreq();
             setDoubleParam(SmarPod_FindRefAndCalibFreq, freq);
             spdlog::info("Set find reference and calibration frequency to {}", freq);
+        } else if (function == SmarPod_TargetX || function == SmarPod_TargetY || function == SmarPod_TargetZ
+            || function == SmarPod_TargetRx || function == SmarPod_TargetRy || function == SmarPod_TargetRz) {
+            setDoubleParam(function, value);
+            this->checkTargetPose();
         } else if (function < SMARPOD_FIRST_PARAM) {
             status = asynPortDriver::writeFloat64(pasynUser, value);
         } else {
@@ -372,27 +418,54 @@ Pose SmarPod::getCurrentPose() {
     return pose;
 }
 
-/**
- * @brief Moves the device to the given pose, mirroring it into the Target PVs.
- */
-void SmarPod::moveToPose(const Pose& pose) {
-    int holdTime = 0;
+Pose SmarPod::getCurrentTargetPose(){
+    Pose target;
     this->lock();
-    setDoubleParam(SmarPod_TargetX, pose.x);
-    setDoubleParam(SmarPod_TargetY, pose.y);
-    setDoubleParam(SmarPod_TargetZ, pose.z);
-    setDoubleParam(SmarPod_TargetRx, pose.rx);
-    setDoubleParam(SmarPod_TargetRy, pose.ry);
-    setDoubleParam(SmarPod_TargetRz, pose.rz);
-    getIntegerParam(SmarPod_HoldTime, &holdTime);
-    callParamCallbacks();
+    getDoubleParam(SmarPod_TargetX, &target.x);
+    getDoubleParam(SmarPod_TargetY, &target.y);
+    getDoubleParam(SmarPod_TargetZ, &target.z);
+    getDoubleParam(SmarPod_TargetRx, &target.rx);
+    getDoubleParam(SmarPod_TargetRy, &target.ry);
+    getDoubleParam(SmarPod_TargetRz, &target.rz);
     this->unlock();
-    try {
-        this->pHexapod->Move(pose, static_cast<unsigned int>(holdTime), 0);
-    } catch (const std::exception& e) {
-        spdlog::error("Move to stored pose failed: {}", e.what());
-    }
+    return target;
 }
+
+void SmarPod::setTargetPose(const Pose& target) {
+    this->lock();
+    setDoubleParam(SmarPod_TargetX, target.x);
+    setDoubleParam(SmarPod_TargetY, target.y);
+    setDoubleParam(SmarPod_TargetZ, target.z);
+    setDoubleParam(SmarPod_TargetRx, target.rx);
+    setDoubleParam(SmarPod_TargetRy, target.ry);
+    setDoubleParam(SmarPod_TargetRz, target.rz);
+    this->unlock();
+    this->checkTargetPose();
+}
+
+void SmarPod::checkTargetPose() {
+    Pose target = getCurrentTargetPose();
+    if(!this->pHexapod->IsPoseReachable(target)){
+        spdlog::error("Target pose ({}, {}, {}, {}, {}, {}) is not reachable", target.x, target.y, target.z, target.rx, target.ry, target.rz);
+        setIntegerParam(SmarPod_PoseNotReachable, 1);
+    } else {
+        setIntegerParam(SmarPod_PoseNotReachable, 0);
+    }
+    callParamCallbacks();
+}
+
+void SmarPod::moveToTargetPose() {
+    int reachable, holdTime;
+    getIntegerParam(SmarPod_PoseNotReachable, &reachable);
+    if (reachable) {
+        spdlog::error("Cannot move to target pose because it is not reachable!");
+        return;
+    }
+    getIntegerParam(SmarPod_HoldTime, &holdTime);
+    Pose target = getCurrentTargetPose();
+    this->pHexapod->Move(target, static_cast<unsigned int>(holdTime), 1);
+}
+
 
 /**
  * @brief Reads the current pose and move status from the device and updates the
@@ -402,7 +475,7 @@ void SmarPod::updatePoseAndStatus() {
     // Move status is available regardless of reference state.
     MoveStatus moveStatus = this->pHexapod->GetMoveStatus();
     if (moveStatus != MoveStatus::STOPPED) {
-        spdlog::info("Current move status: {}", static_cast<int>(moveStatus));
+        spdlog::debug("Current move status: {}", static_cast<int>(moveStatus));
     }
     setIntegerParam(SmarPod_MoveStatus, static_cast<int>(moveStatus));
 
@@ -485,12 +558,13 @@ void SmarPod::report(FILE* fp, int details) {
 void SmarPod::getInitialState() {
     // Get initial state of the SmarPod and set parameters accordingly
     auto [speed, speedControl] = this->pHexapod->GetSpeed();
-    setDoubleParam(SmarPod_Speed, speed);
+    setDoubleParam(SmarPod_Speed, speed * 1000.0); // Convert from m/s to mm/s for PV
     setIntegerParam(SmarPod_SpeedControl, static_cast<int>(speedControl));
     auto [accel, accelControl] = this->pHexapod->GetAcceleration();
-    setDoubleParam(SmarPod_Acceleration, accel);
+    setDoubleParam(SmarPod_Acceleration, accel * 1000.0); // Convert from m/s^2 to mm/s^2 for PV
     setIntegerParam(SmarPod_AccelControl, static_cast<int>(accelControl));
-    setIntegerParam(SmarPod_IsReferenced, static_cast<int>(this->pHexapod->IsReferenced()));
+    bool referenced = this->pHexapod->IsReferenced();
+    setIntegerParam(SmarPod_IsReferenced, static_cast<int>(referenced));
     setIntegerParam(SmarPod_MaxFrequency, static_cast<int>(this->pHexapod->GetMaxFrequency()));
     setDoubleParam(SmarPod_FindRefAndCalibFreq, this->pHexapod->GetFindRefAndCalibFreq());
     setIntegerParam(SmarPod_MoveStatus, static_cast<int>(this->pHexapod->GetMoveStatus()));
@@ -499,7 +573,7 @@ void SmarPod::getInitialState() {
     setDoubleParam(SmarPod_PivotX, x);
     setDoubleParam(SmarPod_PivotY, y);
     setDoubleParam(SmarPod_PivotZ, z);
-    if (this->pHexapod->IsReferenced()) {
+    if (referenced) {
         Pose pose = this->pHexapod->GetPose();
         setDoubleParam(SmarPod_PoseX, pose.x);
         setDoubleParam(SmarPod_PoseY, pose.y);
@@ -507,6 +581,10 @@ void SmarPod::getInitialState() {
         setDoubleParam(SmarPod_PoseRx, pose.rx);
         setDoubleParam(SmarPod_PoseRy, pose.ry);
         setDoubleParam(SmarPod_PoseRz, pose.rz);
+
+        // If we're referenced, assume we're calibrated as well
+        // (the SmarPod API doesn't provide a way to check this)
+        setIntegerParam(SmarPod_IsCalibrated, 1);
     }
     auto [rx, ry, rz] = this->pHexapod->GetAxesOrientation();
     setDoubleParam(SmarPod_AxesRx, rx);
@@ -540,17 +618,6 @@ void SmarPod::getInitialState() {
 
     setIntegerParam(SmarPod_HoldTime, 0);
     callParamCallbacks();
-}
-
-int LogError(Smarpod_Status status) {
-    if (status != SMARPOD_OK) {
-        const char* info;
-        if (Smarpod_GetStatusInfo(status, &info))
-            printf("unknown SmarPod status\n");
-        else
-            printf("error: %s\n", info);
-    }
-    return status;
 }
 
 /**
@@ -618,8 +685,18 @@ SmarPod::SmarPod(const char* portName, const char* locator, int modelNumber)
                                  " is not supported, or system locator " + locator +
                                  " could not be found.");
 
-    spdlog::info("Configuring controller for model {} at locator {}", modelNumber, locator);
-    this->pApi->ConfigureController(modelNumber, locator);
+
+    // TODO: This should probably not be done on every startup, since 
+    // after this call, a calibration is required.
+    // spdlog::info("Configuring controller for model {} at locator {}", modelNumber, locator);
+    // try {
+    //     this->pApi->ConfigureController(modelNumber, locator);
+    //     setIntegerParam(SmarPod_ControllerConfigured, 1);
+    // } catch (const std::exception& e) {
+    //     spdlog::error("Error configuring controller: {}", e.what());
+    //     setIntegerParam(SmarPod_ControllerConfigured, 0);
+    //     return;
+    // }
 
     spdlog::info("Opening hexapod for model {} at locator {}", modelNumber, locator);
     this->pHexapod = this->pApi->Open(modelNumber, locator);
@@ -636,6 +713,13 @@ SmarPod::SmarPod(const char* portName, const char* locator, int modelNumber)
         std::string spPort = std::string(portName) + "_POSE" + std::to_string(i);
         this->storedPoses.push_back(std::make_unique<SmarPodStoredPose>(spPort.c_str(), this));
     }
+
+    // Set 18.5 kHz for speed-controlled move, and speed to 2 mm/s
+    this->pHexapod->SetMaxFrequency(18500);
+    this->pHexapod->SetSpeed(0.002, true);
+
+    // Set reference frequency to 8 kHz, which is the default for SmarPod devices
+    this->pHexapod->SetFindRefAndCalibFreq(8000);
 
     callParamCallbacks();
 

@@ -15,8 +15,7 @@
 #define SmarPodSp_StoreString "SMARPOD_STORE_POSE"
 #define SmarPodSp_ClearString "SMARPOD_CLEAR_POSE"
 #define SmarPodSp_MoveString "SMARPOD_MOVE_POSE"
-#define SmarPodSp_ProtectString "SMARPOD_PROTECT_POSE"
-#define SmarPodSp_ProtectedString "SMARPOD_POSE_PROTECTED"
+#define SmarPodSp_ProtectedString "SMARPOD_PROTECT_POSE"
 #define SmarPodPp_PoseName "SMARPOD_POSE_NAME"
 
 /**
@@ -33,6 +32,7 @@ class SmarPodStoredPose : public asynPortDriver {
 
         virtual asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value);
         virtual asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value);
+        void modifyProtectionStatus(bool protect);
 
     protected:
         int SmarPodSp_StoredX;
@@ -44,7 +44,6 @@ class SmarPodStoredPose : public asynPortDriver {
         int SmarPodSp_Store;
         int SmarPodSp_Clear;
         int SmarPodSp_Move;
-        int SmarPodSp_Protect;
         int SmarPodSp_Protected;
         int SmarPodSp_PoseName;
 

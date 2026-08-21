@@ -44,7 +44,7 @@ void SmarPod::createAllParams() {
     createParam(SmarPod_TargetRzString, asynParamFloat64, &SmarPod_TargetRz);
     createParam(SmarPod_HoldTimeString, asynParamInt32, &SmarPod_HoldTime);
     createParam(SmarPod_WaitForCompletionString, asynParamInt32, &SmarPod_WaitForCompletion);
-    createParam(SmarPod_PoseReachableString, asynParamInt32, &SmarPod_PoseReachable);
+    createParam(SmarPod_PoseNotReachableString, asynParamInt32, &SmarPod_PoseNotReachable);
     createParam(SmarPod_MoveString, asynParamInt32, &SmarPod_Move);
     createParam(SmarPod_StopString, asynParamInt32, &SmarPod_Stop);
     createParam(SmarPod_StopAndHoldString, asynParamInt32, &SmarPod_StopAndHold);

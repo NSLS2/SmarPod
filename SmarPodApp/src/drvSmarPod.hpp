@@ -19,6 +19,9 @@
 #define SMARPOD_VERSION_MINOR 0
 #define SMARPOD_VERSION_PATCH 1
 
+
+
+
 class SmarPodStoredPose;
 
 class SmarPod : public asynPortDriver {
@@ -45,7 +48,13 @@ class SmarPod : public asynPortDriver {
 
         // Accessors used by the SmarPodStoredPose companion driver.
         Pose getCurrentPose();
-        void moveToPose(const Pose& pose);
+        Pose getCurrentTargetPose();
+        void setTargetPose(const Pose& pose);
+        void moveToTargetPose();
+        void reference();
+        void calibrate();
+        void checkTargetPose();
+        void spawnMoveThread(void(*moveThreadFunc)(void*), const char* threadName);
 
     protected:
 #include "SmarPodParamDefs.hpp"
@@ -57,7 +66,12 @@ class SmarPod : public asynPortDriver {
         std::vector<std::unique_ptr<SmarPodStoredPose>> storedPoses;
 
         void updatePoseAndStatus();
-        epicsThreadId moveThread;
+        epicsThreadId moveThreadId;
 };
+
+extern "C" inline void moveThread(void* pPvt) {
+    SmarPod* pSmarPod = (SmarPod*) pPvt;
+    pSmarPod->moveToTargetPose();
+}
 
 #endif

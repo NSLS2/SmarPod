@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-08-20 17:15:37 by jwlodek-->
+<!--Saved on 2026-08-21 10:59:46 by jwlodek-->
 <display version="2.0.0">
   <name>SmarPod Stored Pose $(Num)</name>
   <width>400</width>
+  <height>500</height>
   <background_color>
     <color red="214" green="214" blue="214">
     </color>
@@ -33,7 +34,7 @@
     <x>15</x>
     <y>40</y>
     <width>370</width>
-    <height>490</height>
+    <height>430</height>
     <style>1</style>
     <foreground_color>
       <color red="226" green="239" blue="218">
@@ -50,8 +51,8 @@
     <widget type="textentry" version="3.0.0">
       <name>TargetX_5</name>
       <pv_name>$(P)Pose$(Num):X</pv_name>
-      <x>72</x>
-      <y>131</y>
+      <x>54</x>
+      <y>91</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -62,8 +63,8 @@
     <widget type="textentry" version="3.0.0">
       <name>TargetY_3</name>
       <pv_name>$(P)Pose$(Num):Y</pv_name>
-      <x>72</x>
-      <y>166</y>
+      <x>54</x>
+      <y>126</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -74,8 +75,8 @@
     <widget type="textentry" version="3.0.0">
       <name>TargetZ_3</name>
       <pv_name>$(P)Pose$(Num):Z</pv_name>
-      <x>72</x>
-      <y>201</y>
+      <x>54</x>
+      <y>161</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -86,8 +87,8 @@
     <widget type="textupdate" version="2.0.0">
       <name>PoseX_1</name>
       <pv_name>$(P)Pose$(Num):X_RBV</pv_name>
-      <x>224</x>
-      <y>131</y>
+      <x>206</x>
+      <y>91</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
@@ -95,8 +96,8 @@
     <widget type="textupdate" version="2.0.0">
       <name>PoseY_1</name>
       <pv_name>$(P)Pose$(Num):Y_RBV</pv_name>
-      <x>224</x>
-      <y>166</y>
+      <x>206</x>
+      <y>126</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
@@ -104,38 +105,38 @@
     <widget type="textupdate" version="2.0.0">
       <name>PoseZ_1</name>
       <pv_name>$(P)Pose$(Num):Z_RBV</pv_name>
-      <x>224</x>
-      <y>201</y>
+      <x>206</x>
+      <y>161</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Xlbl_1</name>
-      <text>CX</text>
+      <text>X</text>
       <x>24</x>
-      <y>131</y>
+      <y>101</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Ylbl_1</name>
-      <text>CY</text>
+      <text>Y</text>
       <x>24</x>
-      <y>166</y>
+      <y>136</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Zlbl_1</name>
-      <text>CZ</text>
+      <text>Z</text>
       <x>24</x>
-      <y>201</y>
+      <y>171</y>
       <width>30</width>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TargetRx_3</name>
       <pv_name>$(P)Pose$(Num):Rx</pv_name>
       <x>54</x>
-      <y>229</y>
+      <y>199</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -147,7 +148,7 @@
       <name>TargetRy_3</name>
       <pv_name>$(P)Pose$(Num):Ry</pv_name>
       <x>54</x>
-      <y>264</y>
+      <y>234</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -159,7 +160,7 @@
       <name>TargetRz_3</name>
       <pv_name>$(P)Pose$(Num):Rz</pv_name>
       <x>54</x>
-      <y>299</y>
+      <y>269</y>
       <width>130</width>
       <height>28</height>
       <background_color>
@@ -171,7 +172,7 @@
       <name>PoseRx_1</name>
       <pv_name>$(P)Pose$(Num):Rx_RBV</pv_name>
       <x>206</x>
-      <y>229</y>
+      <y>199</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
@@ -180,7 +181,7 @@
       <name>PoseRy_1</name>
       <pv_name>$(P)Pose$(Num):Ry_RBV</pv_name>
       <x>206</x>
-      <y>264</y>
+      <y>234</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
@@ -189,47 +190,47 @@
       <name>PoseRz_1</name>
       <pv_name>$(P)Pose$(Num):Rz_RBV</pv_name>
       <x>206</x>
-      <y>299</y>
+      <y>269</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RXlbl_1</name>
-      <text>CRX</text>
+      <text>RX</text>
       <x>24</x>
-      <y>229</y>
+      <y>199</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RYlbl_1</name>
-      <text>CRY</text>
+      <text>RY</text>
       <x>24</x>
-      <y>264</y>
+      <y>234</y>
       <width>30</width>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RZlbl_1</name>
-      <text>CRZ</text>
+      <text>RZ</text>
       <x>24</x>
-      <y>299</y>
+      <y>269</y>
       <width>30</width>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>Text Update</name>
       <pv_name>$(P)Pose$(Num):Name_RBV</pv_name>
-      <x>34</x>
-      <y>81</y>
-      <width>305</width>
+      <x>94</x>
+      <y>51</y>
+      <width>255</width>
       <height>25</height>
       <vertical_alignment>1</vertical_alignment>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TargetRz_5</name>
       <pv_name>$(P)Pose$(Num):Name</pv_name>
-      <x>34</x>
-      <y>41</y>
-      <width>305</width>
+      <x>94</x>
+      <y>11</y>
+      <width>255</width>
       <height>28</height>
       <background_color>
         <color name="Button_Background" red="210" green="210" blue="210">
@@ -238,10 +239,10 @@
     </widget>
     <widget type="label" version="2.0.0">
       <name>RZlbl_3</name>
-      <text>Pose Name</text>
+      <text>Name</text>
       <x>34</x>
       <y>11</y>
-      <width>75</width>
+      <width>38</width>
     </widget>
     <widget type="action_button" version="3.0.0">
       <name>Action Button</name>
@@ -254,7 +255,7 @@
       </actions>
       <text>Move To Pose</text>
       <x>14</x>
-      <y>341</y>
+      <y>311</y>
       <width>110</width>
       <height>25</height>
       <background_color>
@@ -274,7 +275,7 @@
       </actions>
       <text>Clear</text>
       <x>284</x>
-      <y>341</y>
+      <y>311</y>
       <width>70</width>
       <height>25</height>
       <background_color>
@@ -294,7 +295,7 @@
       </actions>
       <text>Store Current Pose</text>
       <x>128</x>
-      <y>341</y>
+      <y>311</y>
       <width>150</width>
       <height>25</height>
       <background_color>
@@ -305,25 +306,28 @@
     </widget>
     <widget type="combo" version="2.0.0">
       <name>Combo Box</name>
-      <pv_name>$(P)Pose$(Num):Protect</pv_name>
-      <x>72</x>
-      <y>401</y>
+      <pv_name>$(P)Pose$(Num):Protected</pv_name>
+      <x>84</x>
+      <y>361</y>
+      <height>25</height>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>PoseRz_3</name>
-      <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
-      <x>184</x>
-      <y>401</y>
+      <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
+      <x>196</x>
+      <y>361</y>
       <width>130</width>
       <height>28</height>
       <vertical_alignment>1</vertical_alignment>
     </widget>
     <widget type="label" version="2.0.0">
       <name>RZlbl_4</name>
-      <text>Protect Status</text>
+      <text>Status</text>
       <x>24</x>
-      <y>411</y>
-      <width>30</width>
+      <y>361</y>
+      <width>40</width>
+      <height>25</height>
+      <vertical_alignment>1</vertical_alignment>
     </widget>
   </widget>
 </display>

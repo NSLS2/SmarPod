@@ -166,6 +166,14 @@ record(bi, "$(P)Referenced_RBV") {
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_IS_REFERENCED")
 }
+record(bi, "$(P)Calibrated_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Calibrated state")
+    field(ZNAM, "Not calibrated")
+    field(ONAM, "Calibrated")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_IS_CALIBRATED")
+}
 record(ao, "$(P)FindRefAndCalibFreq") {
     field(DTYP, "asynFloat64")
     field(DESC, "Find-ref/calibration frequency")
@@ -404,24 +412,24 @@ record(longin, "$(P)CheckPose_RBV") {
 record(ai, "$(P)PoseX_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose X")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_X")
 }
 record(ai, "$(P)PoseY_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose Y")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Y")
 }
 record(ai, "$(P)PoseZ_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose Z")
-    field(EGU,  "m")
-    field(PREC, "6")
+    field(EGU,  "mm")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_Z")
 }
@@ -429,7 +437,7 @@ record(ai, "$(P)PoseRx_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RX")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RX")
 }
@@ -437,7 +445,7 @@ record(ai, "$(P)PoseRy_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RY")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RY")
 }
@@ -445,7 +453,7 @@ record(ai, "$(P)PoseRz_RBV") {
     field(DTYP, "asynFloat64")
     field(DESC, "Current pose RZ")
     field(EGU,  "deg")
-    field(PREC, "6")
+    field(PREC, "3")
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_RZ")
 }
@@ -560,6 +568,135 @@ record(ai, "$(P)TargetRz_RBV") {
     field(SCAN, "I/O Intr")
     field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_TARGET_RZ")
 }
+
+#---------------------------------------------------------------------------
+# Target tweak up/down
+#
+# Position axes step by PositionStep (mm); rotation axes by AngleStep (deg).
+#---------------------------------------------------------------------------
+record(ao, "$(P)PositionStep") {
+    field(DTYP, "Soft Channel")
+    field(DESC, "Linear tweak step")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(PINI, "YES")
+    field(VAL,  "0.2")
+}
+record(ao, "$(P)AngleStep") {
+    field(DTYP, "Soft Channel")
+    field(DESC, "Angular tweak step")
+    field(EGU,  "deg")
+    field(PREC, "3")
+    field(PINI, "YES")
+    field(VAL,  "1.0")
+}
+
+record(calcout, "$(P)TweakTargetXPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetX_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetX PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetXNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetX_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetX PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetYPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetY_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetY PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetYNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetY_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetY PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetZPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetZ_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetZ PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetZNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetZ_RBV")
+    field(INPB, "$(P)PositionStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetZ PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRxPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRx_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetRx PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRxNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRx_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetRx PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRyPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRy_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetRy PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRyNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRy_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetRy PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRzPos") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRz_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A+B")
+    field(OUT,  "$(P)TargetRz PP NMS")
+    field(SCAN, "Passive")
+}
+record(calcout, "$(P)TweakTargetRzNeg") {
+    field(DTYP, "Soft Channel")
+    field(INPA, "$(P)TargetRz_RBV")
+    field(INPB, "$(P)AngleStep")
+    field(CALC, "A-B")
+    field(OUT,  "$(P)TargetRz PP NMS")
+    field(SCAN, "Passive")
+}
+
+record(bi, "$(P)PoseNotReachable_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Target pose not reachable")
+    field(ZNAM, "Yes")
+    field(ONAM, "No")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_POSE_UNREACHABLE")
+}
+
 record(longout, "$(P)HoldTime") {
     field(DTYP, "asynInt32")
     field(DESC, "Hold time after move")
@@ -791,6 +928,14 @@ record(bo, "$(P)ConfigureSystem") {
     field(ZNAM, "Done")
     field(ONAM, "Configure")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_CONFIGURE_SYSTEM")
+}
+record(bi, "$(P)ControllerConfigured_RBV") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Controller configured state")
+    field(ZNAM, "Not configured")
+    field(ONAM, "Configured")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_IS_CONTROLLER_CONFIGURED")
 }
 
 record(bo, "$(P)ProtectAllPoses") {

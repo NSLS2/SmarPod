@@ -19,6 +19,9 @@
 #define SmarPod_FindReferenceMarksString "SMARPOD_FIND_REFERENCE_MARKS"
 #define SmarPod_CalibrateString "SMARPOD_CALIBRATE"
 #define SmarPod_IsReferencedString "SMARPOD_IS_REFERENCED"
+#define SmarPod_IsReferencedString "SMARPOD_IS_REFERENCED"
+#define SmarPod_ControllerConfiguredString "SMARPOD_CONTROLLER_CONFIGURED"
+#define SmarPod_IsCalibratedString "SMARPOD_IS_CALIBRATED"
 #define SmarPod_FindRefAndCalibFreqString "SMARPOD_FIND_REF_AND_CALIB_FREQ"
 #define SmarPod_FindRefMethodString "SMARPOD_FIND_REF_METHOD"
 #define SmarPod_FindRefDirXString "SMARPOD_FIND_REF_DIR_X"
@@ -45,7 +48,7 @@
 #define SmarPod_TargetRzString "SMARPOD_TARGET_RZ"
 #define SmarPod_HoldTimeString "SMARPOD_HOLD_TIME"
 #define SmarPod_WaitForCompletionString "SMARPOD_WAIT_FOR_COMPLETION"
-#define SmarPod_PoseReachableString "SMARPOD_POSE_REACHABLE"
+#define SmarPod_PoseNotReachableString "SMARPOD_POSE_UNREACHABLE"
 #define SmarPod_MoveString "SMARPOD_MOVE"
 #define SmarPod_StopString "SMARPOD_STOP"
 #define SmarPod_StopAndHoldString "SMARPOD_STOP_AND_HOLD"
@@ -82,6 +85,8 @@ int SmarPod_AccelControl;
 int SmarPod_FindReferenceMarks;
 int SmarPod_Calibrate;
 int SmarPod_IsReferenced;
+int SmarPod_IsCalibrated;
+int SmarPod_ControllerConfigured;
 int SmarPod_FindRefAndCalibFreq;
 int SmarPod_FindRefMethod;
 int SmarPod_FindRefDirX;
@@ -108,7 +113,7 @@ int SmarPod_TargetRy;
 int SmarPod_TargetRz;
 int SmarPod_HoldTime;
 int SmarPod_WaitForCompletion;
-int SmarPod_PoseReachable;
+int SmarPod_PoseNotReachable;
 int SmarPod_Move;
 int SmarPod_Stop;
 int SmarPod_StopAndHold;

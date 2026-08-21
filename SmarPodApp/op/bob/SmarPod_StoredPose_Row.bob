@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-08-21 09:21:19 by jwlodek-->
+<!--Saved on 2026-08-21 10:57:03 by jwlodek-->
 <display version="2.0.0">
   <name>SmarPod Stored Pose Row</name>
   <width>365</width>
@@ -28,7 +28,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
     <tooltip>Move to pose</tooltip>
@@ -58,7 +58,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
     <tooltip>Store current postition</tooltip>
@@ -88,7 +88,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
     <tooltip>Edit pose</tooltip>
@@ -118,7 +118,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
     <tooltip>Clear pose</tooltip>
@@ -127,7 +127,7 @@
     <name>Action Button_4</name>
     <actions>
       <action type="write_pv">
-        <pv_name>$(P)Pose$(Num):Protect</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected</pv_name>
         <value>1</value>
         <description>Protect Pose</description>
       </action>
@@ -144,7 +144,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
     <tooltip>Protect stored pose</tooltip>
@@ -164,7 +164,7 @@
             </color>
           </value>
         </exp>
-        <pv_name>$(P)Pose$(Num):Protect_RBV</pv_name>
+        <pv_name>$(P)Pose$(Num):Protected_RBV</pv_name>
       </rule>
     </rules>
   </widget>

@@ -1,0 +1,107 @@
+record(ao, "$(P)$(NAME)X") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose X")
+    field(EGU,  "mm")
+    field(VAL, "0")
+    field(PINI, "YES")
+    field(PREC, "3")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_X")
+}
+record(ai, "$(P)$(NAME)X_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose X")
+    field(VAL, "0")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_X")
+}
+record(ao, "$(P)$(NAME)Y") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose Y")
+    field(EGU,  "mm")
+    field(VAL, "0")
+    field(PINI, "YES")
+    field(PREC, "3")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_Y")
+}
+record(ai, "$(P)$(NAME)Y_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose Y")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_Y")
+}
+record(ao, "$(P)$(NAME)Z") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose Z")
+    field(EGU,  "mm")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(PREC, "3")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_Z")
+}
+record(ai, "$(P)$(NAME)Z_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose Z")
+    field(EGU,  "mm")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_Z")
+}
+record(ao, "$(P)$(NAME)Rx") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RX")
+    field(EGU,  "deg")
+    field(PINI, "YES")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RX")
+}
+record(ai, "$(P)$(NAME)Rx_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RX")
+    field(EGU,  "deg")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RX")
+}
+record(ao, "$(P)$(NAME)Ry") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RY")
+    field(EGU,  "deg")
+    field(PINI, "YES")
+    field(PREC, "3")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RY")
+}
+record(ai, "$(P)$(NAME)Ry_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RY")
+    field(EGU,  "deg")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RY")
+}
+record(ao, "$(P)$(NAME)Rz") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(PINI, "YES")
+    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RZ")
+}
+record(ai, "$(P)$(NAME)Rz_RBV") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "$(NAME) pose RZ")
+    field(EGU,  "deg")
+    field(PREC, "3")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_$(NAME_UPPER)_RZ")
+}

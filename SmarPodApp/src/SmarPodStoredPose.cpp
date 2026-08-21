@@ -25,12 +25,10 @@ SmarPodStoredPose::SmarPodStoredPose(const char* portName, SmarPod* parent)
     createParam(SmarPodSp_StoreString, asynParamInt32, &SmarPodSp_Store);
     createParam(SmarPodSp_ClearString, asynParamInt32, &SmarPodSp_Clear);
     createParam(SmarPodSp_MoveString, asynParamInt32, &SmarPodSp_Move);
-    createParam(SmarPodSp_ProtectString, asynParamInt32, &SmarPodSp_Protect);
     createParam(SmarPodSp_ProtectedString, asynParamInt32, &SmarPodSp_Protected);
     createParam(SmarPodPp_PoseName, asynParamOctet, &SmarPodSp_PoseName);
 
     this->setStoredPose({0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
-    setIntegerParam(SmarPodSp_Protect, 0);
     setIntegerParam(SmarPodSp_Protected, 0);
     callParamCallbacks();
 }
@@ -69,8 +67,14 @@ void SmarPodStoredPose::moveToStoredPose() {
     getDoubleParam(SmarPodSp_StoredRx, &pose.rx);
     getDoubleParam(SmarPodSp_StoredRy, &pose.ry);
     getDoubleParam(SmarPodSp_StoredRz, &pose.rz);
+    this->parent->setTargetPose(pose);
     spdlog::info("Moving SmarPod to stored pose from {}", this->portName);
-    this->parent->moveToPose(pose);
+    this->parent->spawnMoveThread(moveThread, "MoveToStoredPose");
+}
+
+void SmarPodStoredPose::modifyProtectionStatus(bool protect) {
+    setIntegerParam(SmarPodSp_Protected, protect ? 1 : 0);
+    callParamCallbacks();
 }
 
 asynStatus SmarPodStoredPose::writeInt32(asynUser* pasynUser, epicsInt32 value) {
@@ -95,12 +99,11 @@ asynStatus SmarPodStoredPose::writeInt32(asynUser* pasynUser, epicsInt32 value) 
         }
         return asynSuccess;
     } else if (function == SmarPodSp_Move) {
+        if (this->isProtected()) {
+            spdlog::warn("Stored pose {} is protected; move ignored", this->portName);
+            return asynError;
+        }
         if (value) this->moveToStoredPose();
-        return asynSuccess;
-    } else if (function == SmarPodSp_Protect) {
-        setIntegerParam(SmarPodSp_Protect, value);
-        setIntegerParam(SmarPodSp_Protected, value);
-        callParamCallbacks();
         return asynSuccess;
     }
 
