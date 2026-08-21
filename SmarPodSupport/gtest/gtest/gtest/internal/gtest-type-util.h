@@ -59,64 +59,64 @@ namespace internal {
 // used by various standard libraries (e.g., `std::__1`).  Names outside
 // of namespace std are returned unmodified.
 inline std::string CanonicalizeForStdLibVersioning(std::string s) {
-  static const char prefix[] = "std::__";
-  if (s.compare(0, strlen(prefix), prefix) == 0) {
-    std::string::size_type end = s.find("::", strlen(prefix));
-    if (end != s.npos) {
-      // Erase everything between the initial `std` and the second `::`.
-      s.erase(strlen("std"), end - strlen("std"));
+    static const char prefix[] = "std::__";
+    if (s.compare(0, strlen(prefix), prefix) == 0) {
+        std::string::size_type end = s.find("::", strlen(prefix));
+        if (end != s.npos) {
+            // Erase everything between the initial `std` and the second `::`.
+            s.erase(strlen("std"), end - strlen("std"));
+        }
     }
-  }
 
-  // Strip redundant spaces in typename to match MSVC
-  // For example, std::pair<int, bool> -> std::pair<int,bool>
-  static const char to_search[] = ", ";
-  const char replace_char = ',';
-  size_t pos = 0;
-  while (true) {
-    // Get the next occurrence from the current position
-    pos = s.find(to_search, pos);
-    if (pos == std::string::npos) {
-      break;
+    // Strip redundant spaces in typename to match MSVC
+    // For example, std::pair<int, bool> -> std::pair<int,bool>
+    static const char to_search[] = ", ";
+    const char replace_char = ',';
+    size_t pos = 0;
+    while (true) {
+        // Get the next occurrence from the current position
+        pos = s.find(to_search, pos);
+        if (pos == std::string::npos) {
+            break;
+        }
+        // Replace this occurrence of substring
+        s.replace(pos, strlen(to_search), 1, replace_char);
+        ++pos;
     }
-    // Replace this occurrence of substring
-    s.replace(pos, strlen(to_search), 1, replace_char);
-    ++pos;
-  }
-  return s;
+    return s;
 }
 
 #if GTEST_HAS_RTTI
 // GetTypeName(const std::type_info&) returns a human-readable name of type T.
 inline std::string GetTypeName(const std::type_info& type) {
-  const char* const name = type.name();
+    const char* const name = type.name();
 #if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
-  int status = 0;
-  // gcc's implementation of typeid(T).name() mangles the type name,
-  // so we have to demangle it.
+    int status = 0;
+    // gcc's implementation of typeid(T).name() mangles the type name,
+    // so we have to demangle it.
 #if GTEST_HAS_CXXABI_H_
-  using abi::__cxa_demangle;
+    using abi::__cxa_demangle;
 #endif  // GTEST_HAS_CXXABI_H_
-  char* const readable_name = __cxa_demangle(name, nullptr, nullptr, &status);
-  const std::string name_str(status == 0 ? readable_name : name);
-  free(readable_name);
-  return CanonicalizeForStdLibVersioning(name_str);
+    char* const readable_name = __cxa_demangle(name, nullptr, nullptr, &status);
+    const std::string name_str(status == 0 ? readable_name : name);
+    free(readable_name);
+    return CanonicalizeForStdLibVersioning(name_str);
 #elif defined(_MSC_VER)
-  // Strip struct and class due to differences between
-  // MSVC and other compilers. std::pair<int,bool> is printed as
-  // "struct std::pair<int,bool>" when using MSVC vs "std::pair<int, bool>" with
-  // other compilers.
-  std::string s = name;
-  // Only strip the leading "struct " and "class ", so uses rfind == 0 to
-  // ensure that
-  if (s.rfind("struct ", 0) == 0) {
-    s = s.substr(strlen("struct "));
-  } else if (s.rfind("class ", 0) == 0) {
-    s = s.substr(strlen("class "));
-  }
-  return s;
+    // Strip struct and class due to differences between
+    // MSVC and other compilers. std::pair<int,bool> is printed as
+    // "struct std::pair<int,bool>" when using MSVC vs "std::pair<int, bool>" with
+    // other compilers.
+    std::string s = name;
+    // Only strip the leading "struct " and "class ", so uses rfind == 0 to
+    // ensure that
+    if (s.rfind("struct ", 0) == 0) {
+        s = s.substr(strlen("struct "));
+    } else if (s.rfind("class ", 0) == 0) {
+        s = s.substr(strlen("class "));
+    }
+    return s;
 #else
-  return name;
+    return name;
 #endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
 }
 #endif  // GTEST_HAS_RTTI
@@ -128,18 +128,18 @@ inline std::string GetTypeName(const std::type_info& type) {
 template <typename T>
 std::string GetTypeName() {
 #if GTEST_HAS_RTTI
-  return GetTypeName(typeid(T));
+    return GetTypeName(typeid(T));
 #else
-  return "<type>";
+    return "<type>";
 #endif  // GTEST_HAS_RTTI
 }
 
 // A unique type indicating an empty node
 struct None {};
 
-#define GTEST_TEMPLATE_ \
-  template <typename T> \
-  class
+#define GTEST_TEMPLATE_   \
+    template <typename T> \
+    class
 
 // The template "selector" struct TemplateSel<Tmpl> is used to
 // represent Tmpl, which must be a class template with one type
@@ -151,44 +151,44 @@ struct None {};
 // which C++ doesn't support directly.
 template <GTEST_TEMPLATE_ Tmpl>
 struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
+        template <typename T>
+        struct Bind {
+                typedef Tmpl<T> type;
+        };
 };
 
 #define GTEST_BIND_(TmplSel, T) TmplSel::template Bind<T>::type
 
 template <GTEST_TEMPLATE_ Head_, GTEST_TEMPLATE_... Tail_>
 struct Templates {
-  using Head = TemplateSel<Head_>;
-  using Tail = Templates<Tail_...>;
+        using Head = TemplateSel<Head_>;
+        using Tail = Templates<Tail_...>;
 };
 
 template <GTEST_TEMPLATE_ Head_>
 struct Templates<Head_> {
-  using Head = TemplateSel<Head_>;
-  using Tail = None;
+        using Head = TemplateSel<Head_>;
+        using Tail = None;
 };
 
 // Tuple-like type lists
 template <typename Head_, typename... Tail_>
 struct Types {
-  using Head = Head_;
-  using Tail = Types<Tail_...>;
+        using Head = Head_;
+        using Tail = Types<Tail_...>;
 };
 
 template <typename Head_>
 struct Types<Head_> {
-  using Head = Head_;
-  using Tail = None;
+        using Head = Head_;
+        using Tail = None;
 };
 
 // Helper metafunctions to tell apart a single type from types
 // generated by ::testing::Types
 template <typename... Ts>
 struct ProxyTypeList {
-  using type = Types<Ts...>;
+        using type = Types<Ts...>;
 };
 
 template <typename>
@@ -202,12 +202,12 @@ struct is_proxy_type_list<ProxyTypeList<Ts...>> : std::true_type {};
 // and prevents creating a new type list nested within another one.
 template <typename T>
 struct GenerateTypeList {
- private:
-  using proxy = typename std::conditional<is_proxy_type_list<T>::value, T,
-                                          ProxyTypeList<T>>::type;
+    private:
+        using proxy =
+            typename std::conditional<is_proxy_type_list<T>::value, T, ProxyTypeList<T>>::type;
 
- public:
-  using type = typename proxy::type;
+    public:
+        using type = typename proxy::type;
 };
 
 }  // namespace internal

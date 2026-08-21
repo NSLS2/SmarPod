@@ -946,11 +946,3 @@ record(bo, "$(P)ProtectAllPoses") {
     field(ONAM, "Protect")
     field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_PROTECT_ALL_POSES")
 }
-
-record(bo, "$(P)UnprotectAllPoses") {
-    field(DTYP, "asynInt32")
-    field(DESC, "Unprotect all poses")
-    field(ZNAM, "Done")
-    field(ONAM, "Unprotect")
-    field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))SMARPOD_UNPROTECT_ALL_POSES")
-}

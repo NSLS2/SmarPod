@@ -11,10 +11,10 @@
 SmarPodStoredPose::SmarPodStoredPose(const char* portName, SmarPod* parent)
     : asynPortDriver(portName, 1, /* maxAddr */
                      asynInt32Mask | asynFloat64Mask | asynOctetMask | asynDrvUserMask,
-                     asynInt32Mask | asynFloat64Mask | asynOctetMask,
-                     ASYN_CANBLOCK, 1, /* Autoconnect */
-                     0,                /* Default priority */
-                     0),               /* Default stack size */
+                     asynInt32Mask | asynFloat64Mask | asynOctetMask, ASYN_CANBLOCK,
+                     1,  /* Autoconnect */
+                     0,  /* Default priority */
+                     0), /* Default stack size */
       parent(parent) {
     createParam(SmarPodSp_StoredXString, asynParamFloat64, &SmarPodSp_StoredX);
     createParam(SmarPodSp_StoredYString, asynParamFloat64, &SmarPodSp_StoredY);
@@ -116,10 +116,9 @@ asynStatus SmarPodStoredPose::writeInt32(asynUser* pasynUser, epicsInt32 value) 
 asynStatus SmarPodStoredPose::writeFloat64(asynUser* pasynUser, epicsFloat64 value) {
     int function = pasynUser->reason;
 
-    bool isPoseComponent =
-        (function == SmarPodSp_StoredX || function == SmarPodSp_StoredY ||
-         function == SmarPodSp_StoredZ || function == SmarPodSp_StoredRx ||
-         function == SmarPodSp_StoredRy || function == SmarPodSp_StoredRz);
+    bool isPoseComponent = (function == SmarPodSp_StoredX || function == SmarPodSp_StoredY ||
+                            function == SmarPodSp_StoredZ || function == SmarPodSp_StoredRx ||
+                            function == SmarPodSp_StoredRy || function == SmarPodSp_StoredRz);
     if (isPoseComponent && this->isProtected()) {
         spdlog::warn("Stored pose {} is protected; edit ignored", this->portName);
         return asynError;

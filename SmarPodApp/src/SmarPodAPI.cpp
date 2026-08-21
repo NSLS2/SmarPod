@@ -55,7 +55,9 @@ std::tuple<double, bool> SmarPodHexapod::GetAcceleration() {
     return std::make_tuple(acceleration, accelCtrlEnabled == 1);
 }
 
-void SmarPodHexapod::FindReferenceMarks() { THROW_IF_NOT_OK(Smarpod_FindReferenceMarks(this->GetID())); }
+void SmarPodHexapod::FindReferenceMarks() {
+    THROW_IF_NOT_OK(Smarpod_FindReferenceMarks(this->GetID()));
+}
 void SmarPodHexapod::Calibrate() { THROW_IF_NOT_OK(Smarpod_Calibrate(this->GetID())); }
 bool SmarPodHexapod::IsReferenced() {
     int referenced;

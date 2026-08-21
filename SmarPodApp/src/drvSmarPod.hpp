@@ -19,9 +19,6 @@
 #define SMARPOD_VERSION_MINOR 0
 #define SMARPOD_VERSION_PATCH 1
 
-
-
-
 class SmarPodStoredPose;
 
 class SmarPod : public asynPortDriver {
@@ -54,7 +51,7 @@ class SmarPod : public asynPortDriver {
         void reference();
         void calibrate();
         void checkTargetPose();
-        void spawnMoveThread(void(*moveThreadFunc)(void*), const char* threadName);
+        void spawnMoveThread(void (*moveThreadFunc)(void*), const char* threadName);
 
     protected:
 #include "SmarPodParamDefs.hpp"

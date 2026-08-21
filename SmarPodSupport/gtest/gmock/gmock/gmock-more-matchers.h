@@ -62,27 +62,26 @@ namespace internal {
 // can be used as a Matcher<T> as long as T is either a container that defines
 // empty() and size() (e.g. std::vector or std::string), or a C-style string.
 class IsEmptyMatcher {
- public:
-  // Matches anything that defines empty() and size().
-  template <typename MatcheeContainerType>
-  bool MatchAndExplain(const MatcheeContainerType& c,
-                       MatchResultListener* listener) const {
-    if (c.empty()) {
-      return true;
-    }
-    *listener << "whose size is " << c.size();
-    return false;
-  }
+    public:
+        // Matches anything that defines empty() and size().
+        template <typename MatcheeContainerType>
+        bool MatchAndExplain(const MatcheeContainerType& c, MatchResultListener* listener) const {
+            if (c.empty()) {
+                return true;
+            }
+            *listener << "whose size is " << c.size();
+            return false;
+        }
 
-  // Matches C-style strings.
-  bool MatchAndExplain(const char* s, MatchResultListener* listener) const {
-    return MatchAndExplain(std::string(s), listener);
-  }
+        // Matches C-style strings.
+        bool MatchAndExplain(const char* s, MatchResultListener* listener) const {
+            return MatchAndExplain(std::string(s), listener);
+        }
 
-  // Describes what this matcher matches.
-  void DescribeTo(std::ostream* os) const { *os << "is empty"; }
+        // Describes what this matcher matches.
+        void DescribeTo(std::ostream* os) const { *os << "is empty"; }
 
-  void DescribeNegationTo(std::ostream* os) const { *os << "isn't empty"; }
+        void DescribeNegationTo(std::ostream* os) const { *os << "isn't empty"; }
 };
 
 }  // namespace internal
@@ -91,24 +90,20 @@ class IsEmptyMatcher {
 // string. The container must support both size() and empty(), which all
 // STL-like containers provide.
 inline PolymorphicMatcher<internal::IsEmptyMatcher> IsEmpty() {
-  return MakePolymorphicMatcher(internal::IsEmptyMatcher());
+    return MakePolymorphicMatcher(internal::IsEmptyMatcher());
 }
 
 // Define a matcher that matches a value that evaluates in boolean
 // context to true.  Useful for types that define "explicit operator
 // bool" operators and so can't be compared for equality with true
 // and false.
-MATCHER(IsTrue, negation ? "is false" : "is true") {
-  return static_cast<bool>(arg);
-}
+MATCHER(IsTrue, negation ? "is false" : "is true") { return static_cast<bool>(arg); }
 
 // Define a matcher that matches a value that evaluates in boolean
 // context to false.  Useful for types that define "explicit operator
 // bool" operators and so can't be compared for equality with true
 // and false.
-MATCHER(IsFalse, negation ? "is true" : "is false") {
-  return !static_cast<bool>(arg);
-}
+MATCHER(IsFalse, negation ? "is true" : "is false") { return !static_cast<bool>(arg); }
 
 #if defined(_MSC_VER) && (_MSC_VER == 1900)
 GTEST_DISABLE_MSC_WARNINGS_POP_()  // 4800

@@ -16,9 +16,9 @@
 
 // Avoid including windows.h (https://stackoverflow.com/a/30741042)
 #if defined(SPDLOG_WCHAR_TO_UTF8_SUPPORT)
-extern "C" __declspec(dllimport) void __stdcall OutputDebugStringW(const wchar_t *lpOutputString);
+extern "C" __declspec(dllimport) void __stdcall OutputDebugStringW(const wchar_t* lpOutputString);
 #else
-extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char *lpOutputString);
+extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char* lpOutputString);
 #endif
 extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent();
 
@@ -29,31 +29,31 @@ namespace sinks {
  */
 template <typename Mutex>
 class msvc_sink : public base_sink<Mutex> {
-public:
-    msvc_sink() = default;
-    msvc_sink(bool check_debugger_present)
-        : check_debugger_present_{check_debugger_present} {}
+    public:
+        msvc_sink() = default;
+        msvc_sink(bool check_debugger_present) : check_debugger_present_{check_debugger_present} {}
 
-protected:
-    void sink_it_(const details::log_msg &msg) override {
-        if (check_debugger_present_ && !IsDebuggerPresent()) {
-            return;
-        }
-        memory_buf_t formatted;
-        base_sink<Mutex>::formatter_->format(msg, formatted);
-        formatted.push_back('\0');  // add a null terminator for OutputDebugString
+    protected:
+        void sink_it_(const details::log_msg& msg) override {
+            if (check_debugger_present_ && !IsDebuggerPresent()) {
+                return;
+            }
+            memory_buf_t formatted;
+            base_sink<Mutex>::formatter_->format(msg, formatted);
+            formatted.push_back('\0');  // add a null terminator for OutputDebugString
 #if defined(SPDLOG_WCHAR_TO_UTF8_SUPPORT)
-        wmemory_buf_t wformatted;
-        details::os::utf8_to_wstrbuf(string_view_t(formatted.data(), formatted.size()), wformatted);
-        OutputDebugStringW(wformatted.data());
+            wmemory_buf_t wformatted;
+            details::os::utf8_to_wstrbuf(string_view_t(formatted.data(), formatted.size()),
+                                         wformatted);
+            OutputDebugStringW(wformatted.data());
 #else
-        OutputDebugStringA(formatted.data());
+            OutputDebugStringA(formatted.data());
 #endif
-    }
+        }
 
-    void flush_() override {}
+        void flush_() override {}
 
-    bool check_debugger_present_ = true;
+        bool check_debugger_present_ = true;
 };
 
 using msvc_sink_mt = msvc_sink<std::mutex>;

@@ -88,7 +88,7 @@ std::false_type StrictnessModifierProbe(...);
 
 template <typename T>
 constexpr bool HasStrictnessModifier() {
-  return decltype(StrictnessModifierProbe(std::declval<const T&>()))::value;
+    return decltype(StrictnessModifierProbe(std::declval<const T&>()))::value;
 }
 
 // Base classes that register and deregister with testing::Mock to alter the
@@ -109,165 +109,161 @@ constexpr bool HasStrictnessModifier() {
 
 template <typename Base>
 class NiceMockImpl {
- public:
-  NiceMockImpl() {
-    ::testing::Mock::AllowUninterestingCalls(reinterpret_cast<uintptr_t>(this));
-  }
+    public:
+        NiceMockImpl() {
+            ::testing::Mock::AllowUninterestingCalls(reinterpret_cast<uintptr_t>(this));
+        }
 
-  ~NiceMockImpl() {
-    ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
-  }
+        ~NiceMockImpl() {
+            ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
+        }
 };
 
 template <typename Base>
 class NaggyMockImpl {
- public:
-  NaggyMockImpl() {
-    ::testing::Mock::WarnUninterestingCalls(reinterpret_cast<uintptr_t>(this));
-  }
+    public:
+        NaggyMockImpl() {
+            ::testing::Mock::WarnUninterestingCalls(reinterpret_cast<uintptr_t>(this));
+        }
 
-  ~NaggyMockImpl() {
-    ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
-  }
+        ~NaggyMockImpl() {
+            ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
+        }
 };
 
 template <typename Base>
 class StrictMockImpl {
- public:
-  StrictMockImpl() {
-    ::testing::Mock::FailUninterestingCalls(reinterpret_cast<uintptr_t>(this));
-  }
+    public:
+        StrictMockImpl() {
+            ::testing::Mock::FailUninterestingCalls(reinterpret_cast<uintptr_t>(this));
+        }
 
-  ~StrictMockImpl() {
-    ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
-  }
+        ~StrictMockImpl() {
+            ::testing::Mock::UnregisterCallReaction(reinterpret_cast<uintptr_t>(this));
+        }
 };
 
 }  // namespace internal
 
 template <class MockClass>
-class GTEST_INTERNAL_EMPTY_BASE_CLASS NiceMock
-    : private internal::NiceMockImpl<MockClass>,
-      public MockClass {
- public:
-  static_assert(!internal::HasStrictnessModifier<MockClass>(),
-                "Can't apply NiceMock to a class hierarchy that already has a "
-                "strictness modifier. See "
-                "https://google.github.io/googletest/"
-                "gmock_cook_book.html#NiceStrictNaggy");
-  NiceMock() : MockClass() {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+class GTEST_INTERNAL_EMPTY_BASE_CLASS NiceMock : private internal::NiceMockImpl<MockClass>,
+                                                 public MockClass {
+    public:
+        static_assert(!internal::HasStrictnessModifier<MockClass>(),
+                      "Can't apply NiceMock to a class hierarchy that already has a "
+                      "strictness modifier. See "
+                      "https://google.github.io/googletest/"
+                      "gmock_cook_book.html#NiceStrictNaggy");
+        NiceMock() : MockClass() {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
-  // tests rely on the fact that current implementation reexports protected
-  // constructors as public. These tests would need to be cleaned up first.
+        // Ideally, we would inherit base class's constructors through a using
+        // declaration, which would preserve their visibility. However, many existing
+        // tests rely on the fact that current implementation reexports protected
+        // constructors as public. These tests would need to be cleaned up first.
 
-  // Single argument constructor is special-cased so that it can be
-  // made explicit.
-  template <typename A>
-  explicit NiceMock(A&& arg) : MockClass(std::forward<A>(arg)) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        // Single argument constructor is special-cased so that it can be
+        // made explicit.
+        template <typename A>
+        explicit NiceMock(A&& arg) : MockClass(std::forward<A>(arg)) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  template <typename TArg1, typename TArg2, typename... An>
-  NiceMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
-      : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
-                  std::forward<An>(args)...) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        template <typename TArg1, typename TArg2, typename... An>
+        NiceMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
+            : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
+                        std::forward<An>(args)...) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
- private:
-  NiceMock(const NiceMock&) = delete;
-  NiceMock& operator=(const NiceMock&) = delete;
+    private:
+        NiceMock(const NiceMock&) = delete;
+        NiceMock& operator=(const NiceMock&) = delete;
 };
 
 template <class MockClass>
-class GTEST_INTERNAL_EMPTY_BASE_CLASS NaggyMock
-    : private internal::NaggyMockImpl<MockClass>,
-      public MockClass {
-  static_assert(!internal::HasStrictnessModifier<MockClass>(),
-                "Can't apply NaggyMock to a class hierarchy that already has a "
-                "strictness modifier. See "
-                "https://google.github.io/googletest/"
-                "gmock_cook_book.html#NiceStrictNaggy");
+class GTEST_INTERNAL_EMPTY_BASE_CLASS NaggyMock : private internal::NaggyMockImpl<MockClass>,
+                                                  public MockClass {
+        static_assert(!internal::HasStrictnessModifier<MockClass>(),
+                      "Can't apply NaggyMock to a class hierarchy that already has a "
+                      "strictness modifier. See "
+                      "https://google.github.io/googletest/"
+                      "gmock_cook_book.html#NiceStrictNaggy");
 
- public:
-  NaggyMock() : MockClass() {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+    public:
+        NaggyMock() : MockClass() {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
-  // tests rely on the fact that current implementation reexports protected
-  // constructors as public. These tests would need to be cleaned up first.
+        // Ideally, we would inherit base class's constructors through a using
+        // declaration, which would preserve their visibility. However, many existing
+        // tests rely on the fact that current implementation reexports protected
+        // constructors as public. These tests would need to be cleaned up first.
 
-  // Single argument constructor is special-cased so that it can be
-  // made explicit.
-  template <typename A>
-  explicit NaggyMock(A&& arg) : MockClass(std::forward<A>(arg)) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        // Single argument constructor is special-cased so that it can be
+        // made explicit.
+        template <typename A>
+        explicit NaggyMock(A&& arg) : MockClass(std::forward<A>(arg)) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  template <typename TArg1, typename TArg2, typename... An>
-  NaggyMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
-      : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
-                  std::forward<An>(args)...) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        template <typename TArg1, typename TArg2, typename... An>
+        NaggyMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
+            : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
+                        std::forward<An>(args)...) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
- private:
-  NaggyMock(const NaggyMock&) = delete;
-  NaggyMock& operator=(const NaggyMock&) = delete;
+    private:
+        NaggyMock(const NaggyMock&) = delete;
+        NaggyMock& operator=(const NaggyMock&) = delete;
 };
 
 template <class MockClass>
-class GTEST_INTERNAL_EMPTY_BASE_CLASS StrictMock
-    : private internal::StrictMockImpl<MockClass>,
-      public MockClass {
- public:
-  static_assert(
-      !internal::HasStrictnessModifier<MockClass>(),
-      "Can't apply StrictMock to a class hierarchy that already has a "
-      "strictness modifier. See "
-      "https://google.github.io/googletest/"
-      "gmock_cook_book.html#NiceStrictNaggy");
-  StrictMock() : MockClass() {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+class GTEST_INTERNAL_EMPTY_BASE_CLASS StrictMock : private internal::StrictMockImpl<MockClass>,
+                                                   public MockClass {
+    public:
+        static_assert(!internal::HasStrictnessModifier<MockClass>(),
+                      "Can't apply StrictMock to a class hierarchy that already has a "
+                      "strictness modifier. See "
+                      "https://google.github.io/googletest/"
+                      "gmock_cook_book.html#NiceStrictNaggy");
+        StrictMock() : MockClass() {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
-  // tests rely on the fact that current implementation reexports protected
-  // constructors as public. These tests would need to be cleaned up first.
+        // Ideally, we would inherit base class's constructors through a using
+        // declaration, which would preserve their visibility. However, many existing
+        // tests rely on the fact that current implementation reexports protected
+        // constructors as public. These tests would need to be cleaned up first.
 
-  // Single argument constructor is special-cased so that it can be
-  // made explicit.
-  template <typename A>
-  explicit StrictMock(A&& arg) : MockClass(std::forward<A>(arg)) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        // Single argument constructor is special-cased so that it can be
+        // made explicit.
+        template <typename A>
+        explicit StrictMock(A&& arg) : MockClass(std::forward<A>(arg)) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
-  template <typename TArg1, typename TArg2, typename... An>
-  StrictMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
-      : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
-                  std::forward<An>(args)...) {
-    static_assert(sizeof(*this) == sizeof(MockClass),
-                  "The impl subclass shouldn't introduce any padding");
-  }
+        template <typename TArg1, typename TArg2, typename... An>
+        StrictMock(TArg1&& arg1, TArg2&& arg2, An&&... args)
+            : MockClass(std::forward<TArg1>(arg1), std::forward<TArg2>(arg2),
+                        std::forward<An>(args)...) {
+            static_assert(sizeof(*this) == sizeof(MockClass),
+                          "The impl subclass shouldn't introduce any padding");
+        }
 
- private:
-  StrictMock(const StrictMock&) = delete;
-  StrictMock& operator=(const StrictMock&) = delete;
+    private:
+        StrictMock(const StrictMock&) = delete;
+        StrictMock& operator=(const StrictMock&) = delete;
 };
 
 #undef GTEST_INTERNAL_EMPTY_BASE_CLASS

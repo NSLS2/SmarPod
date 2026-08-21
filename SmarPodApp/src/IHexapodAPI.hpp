@@ -112,9 +112,9 @@ enum class StatusCode {
     BUSY_ERROR = 515,     // Returned by functions Smarpod_Calibrate, Smarpod_FindReferenceMarks,
                           // Smarpod_Moveand Smarpod_StopAndHold if the SmarPod is busy and the
                           // function cannot be executed. E.g.when the SmarPod is referencing or
-                       // calibrating, a call of Smarpod_Move would return withSMARPOD_BUSY_ERROR.
-                       // Smarpod_Move will also returns with SMARPOD_BUSY_ERROR if anothermove
-                       // command that has been called with waitForCompletion=1 is still executing.
+    // calibrating, a call of Smarpod_Move would return withSMARPOD_BUSY_ERROR.
+    // Smarpod_Move will also returns with SMARPOD_BUSY_ERROR if anothermove
+    // command that has been called with waitForCompletion=1 is still executing.
     NOT_REFERENCED_ERROR =
         550,  // Returned by Smarpod_Move if the reference marks of the positioners are not known.
               // See section 2.4.5 “Finding Reference Marks“.

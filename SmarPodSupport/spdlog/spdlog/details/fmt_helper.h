@@ -2,10 +2,11 @@
 // Distributed under the MIT License (http://opensource.org/licenses/MIT)
 #pragma once
 
-#include <chrono>
-#include <iterator>
 #include <spdlog/common.h>
 #include <spdlog/fmt/fmt.h>
+
+#include <chrono>
+#include <iterator>
 #include <type_traits>
 
 #ifdef SPDLOG_USE_STD_FORMAT
@@ -18,14 +19,14 @@ namespace spdlog {
 namespace details {
 namespace fmt_helper {
 
-inline void append_string_view(spdlog::string_view_t view, memory_buf_t &dest) {
-    auto *buf_ptr = view.data();
+inline void append_string_view(spdlog::string_view_t view, memory_buf_t& dest) {
+    auto* buf_ptr = view.data();
     dest.append(buf_ptr, buf_ptr + view.size());
 }
 
 #ifdef SPDLOG_USE_STD_FORMAT
 template <typename T>
-inline void append_int(T n, memory_buf_t &dest) {
+inline void append_int(T n, memory_buf_t& dest) {
     // Buffer should be large enough to hold all digits (digits10 + 1) and a sign
     SPDLOG_CONSTEXPR const auto BUF_SIZE = std::numeric_limits<T>::digits10 + 2;
     char buf[BUF_SIZE];
@@ -39,7 +40,7 @@ inline void append_int(T n, memory_buf_t &dest) {
 }
 #else
 template <typename T>
-inline void append_int(T n, memory_buf_t &dest) {
+inline void append_int(T n, memory_buf_t& dest) {
     fmt::format_int i(n);
     dest.append(i.data(), i.data() + i.size());
 }
@@ -81,7 +82,7 @@ inline unsigned int count_digits(T n) {
 #endif
 }
 
-inline void pad2(int n, memory_buf_t &dest) {
+inline void pad2(int n, memory_buf_t& dest) {
     if (n >= 0 && n < 100)  // 0-99
     {
         dest.push_back(static_cast<char>('0' + n / 10));
@@ -93,7 +94,7 @@ inline void pad2(int n, memory_buf_t &dest) {
 }
 
 template <typename T>
-inline void pad_uint(T n, unsigned int width, memory_buf_t &dest) {
+inline void pad_uint(T n, unsigned int width, memory_buf_t& dest) {
     static_assert(std::is_unsigned<T>::value, "pad_uint must get unsigned T");
     for (auto digits = count_digits(n); digits < width; digits++) {
         dest.push_back('0');
@@ -102,7 +103,7 @@ inline void pad_uint(T n, unsigned int width, memory_buf_t &dest) {
 }
 
 template <typename T>
-inline void pad3(T n, memory_buf_t &dest) {
+inline void pad3(T n, memory_buf_t& dest) {
     static_assert(std::is_unsigned<T>::value, "pad3 must get unsigned T");
     if (n < 1000) {
         dest.push_back(static_cast<char>(n / 100 + '0'));
@@ -115,12 +116,12 @@ inline void pad3(T n, memory_buf_t &dest) {
 }
 
 template <typename T>
-inline void pad6(T n, memory_buf_t &dest) {
+inline void pad6(T n, memory_buf_t& dest) {
     pad_uint(n, 6, dest);
 }
 
 template <typename T>
-inline void pad9(T n, memory_buf_t &dest) {
+inline void pad9(T n, memory_buf_t& dest) {
     pad_uint(n, 9, dest);
 }
 

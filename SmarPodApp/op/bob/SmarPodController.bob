@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2026-08-21 11:33:16 by jwlodek-->
+<!--Saved on 2026-08-21 11:37:42 by jwlodek-->
 <display version="2.0.0">
   <name>SmarPod Controller</name>
   <macros>
@@ -822,9 +822,9 @@
       <name>MoveZeroBtn_41</name>
       <actions>
         <action type="write_pv">
-          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
-          <value>1</value>
-          <description>Set Current Pose As Zero</description>
+          <pv_name>$(P)ProtectAllPoses</pv_name>
+          <value>0</value>
+          <description>Uprotect All</description>
         </action>
       </actions>
       <text>Unprotect All</text>
@@ -837,9 +837,9 @@
       <name>MoveZeroBtn_40</name>
       <actions>
         <action type="write_pv">
-          <pv_name>$(P)SetCurrentPoseAsZero</pv_name>
+          <pv_name>$(P)ProtectAllPoses</pv_name>
           <value>1</value>
-          <description>Set Current Pose As Zero</description>
+          <description>Protect All</description>
         </action>
       </actions>
       <text>Protect All</text>
