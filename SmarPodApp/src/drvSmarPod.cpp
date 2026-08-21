@@ -51,7 +51,6 @@ class StatusMessageSink : public spdlog::sinks::base_sink<spdlog::details::null_
 };
 
 
-
 /**
  * @brief External configuration function for SmarPod.
  *
@@ -541,6 +540,17 @@ void SmarPod::getInitialState() {
 
     setIntegerParam(SmarPod_HoldTime, 0);
     callParamCallbacks();
+}
+
+int LogError(Smarpod_Status status) {
+    if (status != SMARPOD_OK) {
+        const char* info;
+        if (Smarpod_GetStatusInfo(status, &info))
+            printf("unknown SmarPod status\n");
+        else
+            printf("error: %s\n", info);
+    }
+    return status;
 }
 
 /**

@@ -3,12 +3,13 @@
 errlogInit(20000)
 < envPaths
 
+
 dbLoadDatabase("$(TOP)/dbd/SmarPodApp.dbd")
 
 SmarPodApp_registerRecordDeviceDriver(pdbbase)
 
 # Define asyn port name
-epicsEnvSet("PORT", "DRV1")
+epicsEnvSet("PORT", "SP1")
 epicsEnvSet("PREFIX", "DEV:SP1:")
 
 SmarPodConfig("$(PORT)", "sim:123456", 0)

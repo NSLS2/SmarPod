@@ -13,3 +13,4 @@ db/
 .pixi/*
 !.pixi/config.toml
 .iocsh_history
+*.local
