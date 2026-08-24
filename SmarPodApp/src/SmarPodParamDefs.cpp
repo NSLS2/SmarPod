@@ -63,6 +63,5 @@ void SmarPod::createAllParams() {
     createParam(SmarPod_AxesRzString, asynParamFloat64, &SmarPod_AxesRz);
     createParam(SmarPod_SetAxesOrientationString, asynParamInt32, &SmarPod_SetAxesOrientation);
     createParam(SmarPod_ProtectAllPosesString, asynParamInt32, &SmarPod_ProtectAllPoses);
-    createParam(SmarPod_UnprotectAllPosesString, asynParamInt32, &SmarPod_UnprotectAllPoses);
     createParam(SmarPod_ConfigureSystemString, asynParamInt32, &SmarPod_ConfigureSystem);
 }
