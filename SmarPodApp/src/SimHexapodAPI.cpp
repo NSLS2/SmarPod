@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <thread>
 
+#include "SmarPodMath.hpp"
+using namespace spmath;
+
 // Simulator tuning constants. These approximate the real hardware behaviour
 // described in the SmarPod Programmer's Guide; they are not exact figures.
 constexpr double PI = 3.14159265358979323846;
@@ -14,6 +17,9 @@ constexpr double DEFAULT_NO_SC_SPEED = 0.001;   // m/s fallback velocity
 constexpr double SENSOR_POWERUP_DELAY = 0.005;  // s, power-save sensor wake time
 constexpr double WORKSPACE_LINEAR = 0.1;        // m, per-axis half-range
 constexpr double WORKSPACE_ANGULAR = 20.0;      // deg, per-axis half-range
+constexpr double COORD_SYS_ANGLE_LIMIT = 45.0;  // deg, per-axis coordinate-system rotation limit
+constexpr double AXES_RXZ_LIMIT = 180.0;        // deg, axes-orientation rx/rz limit
+constexpr double AXES_RY_LIMIT = 60.0;          // deg, axes-orientation ry limit
 constexpr double JOG_LINEAR = 0.001;            // m, per-axis jog during referencing/calibration
 constexpr double JOG_ANGULAR = 0.5;             // deg, per-axis jog during referencing/calibration
 constexpr unsigned int HOLDTIME_INFINITE = 60000;
@@ -28,6 +34,43 @@ Pose interpolate(const Pose& a, const Pose& b, double f) {
     p.rz = a.rz + (b.rz - a.rz) * f;
     return p;
 }
+
+//---------------------------------------------------------------------------
+// Rigid-body kinematics matching the SmarPod Programmer's Guide.
+//
+// A commanded pose is (t, R) with translation t and rotation R = Rz*Ry*Rx.
+// The coordinate system is (ct, C), the pivot is p. The physical destination
+// of a stage point v is:
+//   relative pivot mode: v' = C*(R*(v - p) + p + t) + ct
+//   fixed pivot mode:    v' = C*(R*(v - p + t) + p) + ct
+// The stage's physical rigid transform is therefore (M = C*R, d) where d is the
+// bracketed translation. GetPose inverts this to recover (t, R) in frame (ct, C).
+//---------------------------------------------------------------------------
+namespace {
+// Commanded pose -> physical transform (rotation M, translation d).
+void poseToPhysical(const Pose& pose, const Mat3& c, const Vec3& ct, const Vec3& p, bool fixed,
+                    Mat3& m, Vec3& d) {
+    Mat3 r = eulerToMatrix(pose.rx, pose.ry, pose.rz);
+    Vec3 t{pose.x, pose.y, pose.z};
+    m = multiply(c, r);
+    Vec3 inner = fixed ? (apply(r, t - p) + p)   // R*(t - p) + p
+                       : (p - apply(r, p) + t);  // p - R*p + t
+    d = apply(c, inner) + ct;
+}
+
+// Physical transform (M, d) -> commanded pose in coordinate system (c, ct).
+Pose physicalToPose(const Mat3& m, const Vec3& d, const Mat3& c, const Vec3& ct, const Vec3& p,
+                    bool fixed) {
+    Mat3 ctT = transpose(c);
+    Mat3 r = multiply(ctT, m);
+    Vec3 e = matrixToEuler(r);
+    Vec3 q = apply(ctT, d - ct);  // C^T (d - ct)
+    Vec3 t = fixed ? (apply(transpose(r), q - p) + p)  // R^T*(q - p) + p
+                   : (q - p + apply(r, p));            // q - p + R*p
+    return {t.x, t.y, t.z, e.x, e.y, e.z};
+}
+}  // namespace
+
 
 void SimHexapod::SetMaxFrequency(unsigned int frequency) { this->maxFrequency = frequency; }
 
@@ -65,6 +108,9 @@ void SimHexapod::SetSensorMode(SensorMode mode) { this->sensorMode = mode; }
 SensorMode SimHexapod::GetSensorMode() { return this->sensorMode; }
 
 void SimHexapod::SetPivot(double x, double y, double z) {
+    if (this->axisRx != 0.0 || this->axisRy != 0.0 || this->axisRz != 0.0) {
+        throw std::runtime_error("Cannot set pivot while a non-zero axes orientation is set");
+    }
     this->pivotX = x;
     this->pivotY = y;
     this->pivotZ = z;
@@ -82,15 +128,43 @@ Pose SimHexapod::GetPose() {
         throw std::runtime_error("Cannot get pose: SmarPod is not referenced");
     }
     this->advance();
+    return this->reportedPose(this->physicalPose());
+}
+
+Pose SimHexapod::physicalPose() const {
     if (this->moveStatus.load() == MoveStatus::MOVING) {
         auto now = std::chrono::steady_clock::now();
         double total =
             std::chrono::duration<double>(this->moveEndTime - this->moveStartTime).count();
         double elapsed = std::chrono::duration<double>(now - this->moveStartTime).count();
         double f = total > 0.0 ? std::min(1.0, elapsed / total) : 1.0;
-        return interpolate(this->moveStartPose, this->moveTargetPose, f);
+        return this->physicalFromCommanded(interpolate(this->moveStartPose, this->moveTargetPose, f));
     }
     return this->currentPose;
+}
+
+Pose SimHexapod::physicalFromCommanded(const Pose& commanded) const {
+    Mat3 c = eulerToMatrix(this->coordSystem.rx + this->axisRx, this->coordSystem.ry + this->axisRy,
+                           this->coordSystem.rz + this->axisRz);
+    Vec3 ct{this->coordSystem.x, this->coordSystem.y, this->coordSystem.z};
+    Vec3 p{this->pivotX, this->pivotY, this->pivotZ};
+    Mat3 m;
+    Vec3 d;
+    poseToPhysical(commanded, c, ct, p, this->pivotMode == PivotMode::FIXED, m, d);
+    Vec3 e = matrixToEuler(m);
+    return {d.x, d.y, d.z, e.x, e.y, e.z};
+}
+
+Pose SimHexapod::reportedPose(const Pose& physical) const {
+    // Physical transform is stored as {translation, XYZ Euler angles}; express it
+    // in the active coordinate system, pivot and pivot mode.
+    Mat3 m = eulerToMatrix(physical.rx, physical.ry, physical.rz);
+    Vec3 d{physical.x, physical.y, physical.z};
+    Mat3 c = eulerToMatrix(this->coordSystem.rx + this->axisRx, this->coordSystem.ry + this->axisRy,
+                           this->coordSystem.rz + this->axisRz);
+    Vec3 ct{this->coordSystem.x, this->coordSystem.y, this->coordSystem.z};
+    Vec3 p{this->pivotX, this->pivotY, this->pivotZ};
+    return physicalToPose(m, d, c, ct, p, this->pivotMode == PivotMode::FIXED);
 }
 
 void SimHexapod::Move(const Pose& pose, unsigned int holdTime, bool waitForCompletion) {
@@ -104,9 +178,10 @@ void SimHexapod::Move(const Pose& pose, unsigned int holdTime, bool waitForCompl
         throw std::runtime_error("Cannot move: target pose is unreachable");
     }
 
-    double duration = this->computeMoveDuration(this->currentPose, pose);
+    Pose startCommanded = this->reportedPose(this->currentPose);
+    double duration = this->computeMoveDuration(startCommanded, pose);
     auto now = std::chrono::steady_clock::now();
-    this->moveStartPose = this->currentPose;
+    this->moveStartPose = startCommanded;
     this->moveTargetPose = pose;
     this->moveStartTime = now;
     this->moveEndTime = now + std::chrono::duration_cast<std::chrono::steady_clock::duration>(
@@ -118,18 +193,18 @@ void SimHexapod::Move(const Pose& pose, unsigned int holdTime, bool waitForCompl
 
     if (waitForCompletion) {
         std::this_thread::sleep_for(std::chrono::duration<double>(duration));
-        this->currentPose = pose;
+        this->currentPose = this->physicalFromCommanded(pose);
         this->advance();
     }
 }
 
 void SimHexapod::Stop() {
-    this->currentPose = this->GetPose();
+    this->currentPose = this->physicalPose();
     this->moveStatus = MoveStatus::STOPPED;
 }
 
 void SimHexapod::StopAndHold(unsigned int holdTime) {
-    this->currentPose = this->GetPose();
+    this->currentPose = this->physicalPose();
     auto now = std::chrono::steady_clock::now();
     this->holdInfinite = (holdTime >= HOLDTIME_INFINITE);
     this->holdEndTime = now + std::chrono::milliseconds(this->holdInfinite ? 0 : holdTime);
@@ -137,22 +212,17 @@ void SimHexapod::StopAndHold(unsigned int holdTime) {
 }
 
 void SimHexapod::Standby() {
-    this->currentPose = this->GetPose();
+    this->currentPose = this->physicalPose();
     this->moveStatus = MoveStatus::STANDBY;
 }
 
 bool SimHexapod::isWithinWorkspace(const Pose& pose) const {
-    // The reachable pose range shifts with the coordinate system and axes
-    // orientation, so test the pose expressed in the default coordinate system.
-    double px = this->coordSystem.x + pose.x;
-    double py = this->coordSystem.y + pose.y;
-    double pz = this->coordSystem.z + pose.z;
-    double prx = this->coordSystem.rx + this->axisRx + pose.rx;
-    double pry = this->coordSystem.ry + this->axisRy + pose.ry;
-    double prz = this->coordSystem.rz + this->axisRz + pose.rz;
-    return std::abs(px) <= WORKSPACE_LINEAR && std::abs(py) <= WORKSPACE_LINEAR &&
-           std::abs(pz) <= WORKSPACE_LINEAR && std::abs(prx) <= WORKSPACE_ANGULAR &&
-           std::abs(pry) <= WORKSPACE_ANGULAR && std::abs(prz) <= WORKSPACE_ANGULAR;
+    // A pose is reachable when the resulting physical stage transform stays
+    // within the per-axis linear and angular travel limits.
+    Pose phys = this->physicalFromCommanded(pose);
+    return std::abs(phys.x) <= WORKSPACE_LINEAR && std::abs(phys.y) <= WORKSPACE_LINEAR &&
+           std::abs(phys.z) <= WORKSPACE_LINEAR && std::abs(phys.rx) <= WORKSPACE_ANGULAR &&
+           std::abs(phys.ry) <= WORKSPACE_ANGULAR && std::abs(phys.rz) <= WORKSPACE_ANGULAR;
 }
 
 double SimHexapod::computeMoveDuration(const Pose& from, const Pose& to) const {
@@ -202,7 +272,7 @@ void SimHexapod::advance() {
     auto now = std::chrono::steady_clock::now();
     MoveStatus status = this->moveStatus.load();
     if (status == MoveStatus::MOVING && now >= this->moveEndTime) {
-        this->currentPose = this->moveTargetPose;
+        this->currentPose = this->physicalFromCommanded(this->moveTargetPose);
         if (this->holdInfinite || now < this->holdEndTime) {
             this->moveStatus = MoveStatus::HOLDING;
         } else {
@@ -246,13 +316,47 @@ void SimHexapod::jogAllAxes(MoveStatus activeStatus) {
     this->moveStatus = MoveStatus::STOPPED;
 }
 
-void SimHexapod::SetCoordinateSystem(const Pose& pose) { this->coordSystem = pose; }
+void SimHexapod::SetCoordinateSystem(const Pose& pose) {
+    if (std::abs(pose.rx) > COORD_SYS_ANGLE_LIMIT || std::abs(pose.ry) > COORD_SYS_ANGLE_LIMIT ||
+        std::abs(pose.rz) > COORD_SYS_ANGLE_LIMIT) {
+        throw std::runtime_error("Coordinate system angles must be between -45 and 45 degrees");
+    }
+    if (this->axisRx != 0.0 || this->axisRy != 0.0 || this->axisRz != 0.0) {
+        throw std::runtime_error(
+            "Cannot set coordinate system while a non-zero axes orientation is set");
+    }
+    this->coordSystem = pose;
+}
 
 Pose SimHexapod::GetCoordinateSystem() { return this->coordSystem; }
 
-void SimHexapod::SetCurrentPoseAsZero() { this->currentPose = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; }
+void SimHexapod::SetCurrentPoseAsZero() {
+    if (this->axisRx != 0.0 || this->axisRy != 0.0 || this->axisRz != 0.0) {
+        throw std::runtime_error(
+            "Cannot zero the pose while a non-zero axes orientation is set");
+    }
+    // Redefine the coordinate system as the current physical transform so the
+    // current pose reads as zero: with C = M_phys and ct = d_phys, a commanded
+    // zero pose maps back to the present physical transform.
+    Pose phys = this->physicalPose();
+    this->coordSystem = {phys.x, phys.y, phys.z, phys.rx, phys.ry, phys.rz};
+}
 
 void SimHexapod::SetAxesOrientation(double rx, double ry, double rz) {
+    if (std::abs(rx) > AXES_RXZ_LIMIT || std::abs(rz) > AXES_RXZ_LIMIT) {
+        throw std::runtime_error("Axes orientation rx/rz must be between -180 and 180 degrees");
+    }
+    if (std::abs(ry) > AXES_RY_LIMIT) {
+        throw std::runtime_error("Axes orientation ry must be between -60 and 60 degrees");
+    }
+    bool csNonZero = this->coordSystem.x != 0.0 || this->coordSystem.y != 0.0 ||
+                     this->coordSystem.z != 0.0 || this->coordSystem.rx != 0.0 ||
+                     this->coordSystem.ry != 0.0 || this->coordSystem.rz != 0.0;
+    bool pivotNonZero = this->pivotX != 0.0 || this->pivotY != 0.0 || this->pivotZ != 0.0;
+    if (csNonZero || pivotNonZero) {
+        throw std::runtime_error(
+            "Cannot set axes orientation while a non-zero coordinate system or pivot is set");
+    }
     this->axisRx = rx;
     this->axisRy = ry;
     this->axisRz = rz;

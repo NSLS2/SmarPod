@@ -14,6 +14,7 @@ endif
 LIBRARY_IOC += drvSmarPod
 
 INC += drvSmarPod.hpp SmarPodParamDefs.hpp IHexapodAPI.hpp SimHexapodAPI.hpp SmarPodStoredPose.hpp
+INC += SmarPodMath.hpp
 ifdef SMARPOD_SDK
 INC += SmarPodAPI.hpp
 endif

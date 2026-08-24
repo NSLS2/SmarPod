@@ -74,6 +74,15 @@ class SimHexapod : public Hexapod {
         double computeMoveDuration(const Pose& from, const Pose& to) const;
         void advance();
         void jogAllAxes(MoveStatus activeStatus);
+
+        // The untransformed pose the positioners physically hold (interpolated
+        // mid-move); GetPose expresses this in the active coordinate system.
+        Pose physicalPose() const;
+        Pose reportedPose(const Pose& physical) const;
+
+        // Maps a commanded pose (coordinate-system frame) to the physical stage
+        // transform stored as {translation, XYZ Euler angles}.
+        Pose physicalFromCommanded(const Pose& commanded) const;
 };
 
 class SimHexapodAPI : public IHexapodAPI {
