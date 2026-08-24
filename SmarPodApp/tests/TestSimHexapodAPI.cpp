@@ -5,12 +5,12 @@
  *
  * Copyright (c): Brookhaven National Laboratory 2026
  */
-#include "TestSimHexaodAPI.hpp"
-
 #include <chrono>
 #include <cmath>
 #include <stdexcept>
 #include <thread>
+
+#include "TestSimHexaodAPI.hpp"
 
 using namespace std::chrono_literals;
 
@@ -198,14 +198,14 @@ TEST_F(TestSimHexapod, PoseOutsideAngularRangeIsUnreachable) {
 
 TEST_F(TestSimHexapod, CoordinateSystemShiftsReachableRange) {
     hex->SetCoordinateSystem(makePose(0.08, 0, 0, 0, 0, 0));
-    EXPECT_FALSE(hex->IsPoseReachable(makePose(0.05, 0, 0, 0, 0, 0)));   // 0.13 m > 0.1 m
-    EXPECT_TRUE(hex->IsPoseReachable(makePose(-0.05, 0, 0, 0, 0, 0)));   // 0.03 m within
+    EXPECT_FALSE(hex->IsPoseReachable(makePose(0.05, 0, 0, 0, 0, 0)));  // 0.13 m > 0.1 m
+    EXPECT_TRUE(hex->IsPoseReachable(makePose(-0.05, 0, 0, 0, 0, 0)));  // 0.03 m within
 }
 
 TEST_F(TestSimHexapod, AxesOrientationShiftsAngularRange) {
     hex->SetAxesOrientation(15.0, 0, 0);
-    EXPECT_FALSE(hex->IsPoseReachable(makePose(0, 0, 0, 10, 0, 0)));   // 25 deg > 20 deg
-    EXPECT_TRUE(hex->IsPoseReachable(makePose(0, 0, 0, -10, 0, 0)));   // 5 deg within
+    EXPECT_FALSE(hex->IsPoseReachable(makePose(0, 0, 0, 10, 0, 0)));  // 25 deg > 20 deg
+    EXPECT_TRUE(hex->IsPoseReachable(makePose(0, 0, 0, -10, 0, 0)));  // 5 deg within
 }
 
 //---------------------------------------------------------------------------

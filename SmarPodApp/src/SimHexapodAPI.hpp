@@ -4,6 +4,10 @@
 
 #include "IHexapodAPI.hpp"
 
+#define SIMHEXAPOD_API_VERSION_MAJOR 1
+#define SIMHEXAPOD_API_VERSION_MINOR 0
+#define SIMHEXAPOD_API_VERSION_PATCH 0
+
 class SimHexapod : public Hexapod {
     public:
         SimHexapod(unsigned int id) : Hexapod(id) {}

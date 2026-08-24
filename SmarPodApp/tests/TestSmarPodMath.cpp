@@ -26,7 +26,8 @@ void expectVec3Near(const Vec3& a, const Vec3& b, double tol) {
 
 void expectMat3Near(const Mat3& a, const Mat3& b, double tol) {
     for (int i = 0; i < 3; ++i)
-        for (int j = 0; j < 3; ++j) EXPECT_NEAR(a.m[i][j], b.m[i][j], tol) << "at (" << i << "," << j << ")";
+        for (int j = 0; j < 3; ++j)
+            EXPECT_NEAR(a.m[i][j], b.m[i][j], tol) << "at (" << i << "," << j << ")";
 }
 }  // namespace
 
@@ -128,8 +129,8 @@ TEST(TestSmarPodMath, SameAxisRotationsAdd) {
 //---------------------------------------------------------------------------
 TEST(TestSmarPodMath, EulerRoundTripReturnsAngles) {
     struct {
-        double rx, ry, rz;
-    } cases[] = {{0, 0, 0},   {10, 20, 30},  {-15, 40, -60},
+            double rx, ry, rz;
+    } cases[] = {{0, 0, 0},     {10, 20, 30}, {-15, 40, -60},
                  {5, -80, 170}, {90, 0, -90}, {-179, 12, 179}};
     for (auto& c : cases) {
         Vec3 e = matrixToEuler(eulerToMatrix(c.rx, c.ry, c.rz));

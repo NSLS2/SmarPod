@@ -64,13 +64,12 @@ Pose physicalToPose(const Mat3& m, const Vec3& d, const Mat3& c, const Vec3& ct,
     Mat3 ctT = transpose(c);
     Mat3 r = multiply(ctT, m);
     Vec3 e = matrixToEuler(r);
-    Vec3 q = apply(ctT, d - ct);  // C^T (d - ct)
+    Vec3 q = apply(ctT, d - ct);                       // C^T (d - ct)
     Vec3 t = fixed ? (apply(transpose(r), q - p) + p)  // R^T*(q - p) + p
                    : (q - p + apply(r, p));            // q - p + R*p
     return {t.x, t.y, t.z, e.x, e.y, e.z};
 }
 }  // namespace
-
 
 void SimHexapod::SetMaxFrequency(unsigned int frequency) { this->maxFrequency = frequency; }
 
@@ -138,7 +137,8 @@ Pose SimHexapod::physicalPose() const {
             std::chrono::duration<double>(this->moveEndTime - this->moveStartTime).count();
         double elapsed = std::chrono::duration<double>(now - this->moveStartTime).count();
         double f = total > 0.0 ? std::min(1.0, elapsed / total) : 1.0;
-        return this->physicalFromCommanded(interpolate(this->moveStartPose, this->moveTargetPose, f));
+        return this->physicalFromCommanded(
+            interpolate(this->moveStartPose, this->moveTargetPose, f));
     }
     return this->currentPose;
 }
@@ -332,8 +332,7 @@ Pose SimHexapod::GetCoordinateSystem() { return this->coordSystem; }
 
 void SimHexapod::SetCurrentPoseAsZero() {
     if (this->axisRx != 0.0 || this->axisRy != 0.0 || this->axisRz != 0.0) {
-        throw std::runtime_error(
-            "Cannot zero the pose while a non-zero axes orientation is set");
+        throw std::runtime_error("Cannot zero the pose while a non-zero axes orientation is set");
     }
     // Redefine the coordinate system as the current physical transform so the
     // current pose reads as zero: with C = M_phys and ct = d_phys, a commanded
@@ -408,7 +407,10 @@ MoveStatus SimHexapod::GetMoveStatus() {
     return this->moveStatus.load();
 }
 
-std::tuple<int, int, int> SimHexapodAPI::GetVersion() { return std::make_tuple(1, 0, 0); }
+std::tuple<int, int, int> SimHexapodAPI::GetVersion() {
+    return std::make_tuple(SIMHEXAPOD_API_VERSION_MAJOR, SIMHEXAPOD_API_VERSION_MINOR,
+                           SIMHEXAPOD_API_VERSION_PATCH);
+}
 
 std::vector<unsigned int> SimHexapodAPI::GetSupportedModels() {
     return std::vector<unsigned int>{0};
