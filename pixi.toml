@@ -1,4 +1,5 @@
 [workspace]
+requires-pixi = ">=0.82.1"
 authors = ["Jakub Wlodek <jwlodek@bnl.gov>"]
 channels = ["conda-forge"]
 name = "SmarPod"
